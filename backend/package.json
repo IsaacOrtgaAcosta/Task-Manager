@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IsaacOrtgaAcosta/Task-Manager.git"
+  },
+  "author": "Isaac",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IsaacOrtgaAcosta/Task-Manager/issues"
+  },
+  "homepage": "https://github.com/IsaacOrtgaAcosta/Task-Manager#readme",
+  "description": ""
+}

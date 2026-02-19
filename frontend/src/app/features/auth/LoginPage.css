@@ -1,0 +1,14 @@
+.loginPage-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginPage-logoContent img{
+    width: 250px;
+}
+
+.loginPage-title{
+    color: var(--text-primary);
+}

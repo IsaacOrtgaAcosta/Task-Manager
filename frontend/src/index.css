@@ -1,12 +1,13 @@
 :root {
   --font-primary: 'Roboto', system-ui, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --primary: #E63346;
+  --secondary: #495057;
   --hover-primary: #D62839;
   --background-color: #F9F9F9;
   --error: #E63946;
   --warning: #F08C00;
-  --text-primary: #212529;
-  --text-secondary: #495057;
+  --primary-text: #212529;
+  --secondary-text: #495057;
 }
 
 body{

@@ -1,14 +1,27 @@
-.loginPage-content{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.loginPage-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100%;
+  padding: 24px 16px;
 }
 
-.loginPage-logoContent img{
-    width: 250px;
+.loginPage-logoContent{
+    width: 100%;
 }
 
-.loginPage-title{
-    color: var(--text-primary);
+.loginPage-logoContent img {
+  width: 300px;
+}
+
+.loginPage-title {
+  color: var(--text-primary);
+}
+
+.loginPage-button {
+  display: none;
+}
+
+.MuiDivider-root {
+  border-bottom: 1px solid var(--secondary);
 }

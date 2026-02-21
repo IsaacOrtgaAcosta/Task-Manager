@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Box, Typography, Divider, Link } from "@mui/material";
-import Logotype from "../../../assets/logotype.png";
-import { emailValidation, passwordValiadtion } from "../../utils/validators";
+import { login } from "../../api/auth.api";
+import { emailValidation, passwordValidation } from "../../utils/validators";
 import { TextFieldComponent } from "../../shared/components/TextFieldComponent";
 import { ButtonComponent } from "../../shared/components/ButtonComponent";
 import { AlertComponent } from "../../shared/components/AlertComponent";
+import { manageErrors } from "../../utils/errorMessage";
+import Logotype from "../../../assets/logotype.png";
 import "./LoginPage.css";
 
 export const LoginPage = () => {
@@ -34,11 +36,12 @@ export const LoginPage = () => {
       });
     }
   };
-  
+
   //Function that validates wether the password meets the requirements
   const meetPasswordTheRequirements = (password) => {
-       const isOK = passwordValiadtion(password);
-       console.log('ES LA CONTRASEÑA CORRECTA: ', isOK)
+    console.log("PASSWORD ENVIADA: ", password);
+    const isOK = passwordValidation(password);
+    console.log("LA PASSWORD EN ISOK DA: ", isOK);
     //If the password is valid or the field is empty, then update the password value
     if (password === "") {
       setFieldErrors((prev) => {
@@ -50,22 +53,36 @@ export const LoginPage = () => {
       });
     } else {
       setFieldErrors((prev) => {
-        return { ...prev, password: `The password must be at least 6-12 characteres long and include one number` };
+        return {
+          ...prev,
+          password: `The password must be at least 6-12 characteres long and include one number`,
+        };
       });
     }
-  }
+  };
 
   const onTogglePassword = () =>
     setShowPassowrd((showPassword) => !showPassword);
 
-  const sendUserData = (email, password) => {
-    emailValiadtion(email);
-    if (!isCorrectEmail) return;
-    console.log("ENVIANDO...");
+  const validateUserData = () => {
+    if (emailValidation(email) === false) return;
+    if (passwordValidation(password) === false) return;
+    sendLoginRequest(email, password);
+  };
+
+  const sendLoginRequest = async (email, password) => {
+    try {
+      const data = await login({ email, password });
+      console.log('AQUÍ LA DATA: ', data)
+      localStorage.setItem("access_token", data.token);
+    } catch (error) {
+      setAuthError(true);
+      console.error(error);
+    }
   };
 
   return (
-    <>
+    <Box className="loginPage-container">
       <Box className="loginPage-content">
         <Box className="loginPage-logoContent">
           <img src={Logotype} alt="Task Manager Logotype" />
@@ -121,7 +138,7 @@ export const LoginPage = () => {
             <ButtonComponent
               buttonTitle="Sign In"
               size={"large"}
-              onClick={sendUserData}
+              onClick={validateUserData}
               sx={{
                 width: "100%",
                 height: "50px",
@@ -165,24 +182,26 @@ export const LoginPage = () => {
           </Box>
         </Box>
       </Box>
-      <Box
-        sx={{
-          width: "100%",
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: "1000",
-        }}
-      >
-        <AlertComponent
-          severity="error"
-          sx={{ backgroundColor: "var(--primary)", color: "white" }}
-          color="white"
-          alertTitle="Error"
-          alertDescription="Unable to connect to the server. Please try again."
-        />
-      </Box>
-    </>
+      {authError && (
+        <Box
+          sx={{
+            width: "100%",
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: "1000",
+          }}
+        >
+          <AlertComponent
+            severity="error"
+            sx={{ backgroundColor: "var(--primary)", color: "white", display: 'flex', justifyContent: 'center' }}
+            color="white"
+            alertTitle="Error"
+            alertDescription="Unable to connect to the server. Please try again."
+          />
+        </Box>
+      )}
+    </Box>
   );
 };

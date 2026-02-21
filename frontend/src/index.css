@@ -1,0 +1,23 @@
+:root {
+  --font-primary: 'Roboto', system-ui, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --primary: #E63346;
+  --secondary: #495057;
+  --hover-primary: #D62839;
+  --background-color: #F9F9F9;
+  --error: #E63946;
+  --warning: #F08C00;
+  --primary-text: #212529;
+  --secondary-text: #495057;
+}
+
+body{
+  margin: 0;
+  font-family: var(--font-primary);
+  -webkit-font-smothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}

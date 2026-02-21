@@ -1,3 +1,4 @@
+
 .loginPage-content {
   display: flex;
   flex-direction: column;
@@ -25,3 +26,5 @@
 .MuiDivider-root {
   border-bottom: 1px solid var(--secondary);
 }
+
+

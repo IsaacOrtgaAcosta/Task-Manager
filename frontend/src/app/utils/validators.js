@@ -4,7 +4,7 @@
     return regex.test(email);
   };
 
-  export const passwordValiadtion = (password) => {
+  export const passwordValidation = (password) => {
     const regex = /^(?=.*[A-Za-z])(?=.*\d).{6,12}$/;
     return regex.test(password);
   }

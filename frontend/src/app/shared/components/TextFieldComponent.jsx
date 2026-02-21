@@ -21,8 +21,6 @@ export const TextFieldComponent = ({
 }) => {
   const isPassword = type === "password";
   if(helperText !== '') error = true;
-  console.log(helperText)
-  console.log('ERROR: ', error)
 
   return (
     <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined" error={error}>

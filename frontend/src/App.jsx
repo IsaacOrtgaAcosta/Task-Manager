@@ -1,10 +1,13 @@
-import { useState } from 'react';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './app/router';
-import './App.css'
+import { useState } from "react";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./app/router";
+import { AuthProvider } from "./app/providers/AuthProvider.jsx";
+import "./App.css";
 
 export const App = () => {
-
-  return <RouterProvider router={router} />;
-}
-
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
+};

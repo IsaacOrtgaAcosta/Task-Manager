@@ -23,7 +23,7 @@ export const TextFieldComponent = ({
   if(helperText !== '') error = true;
 
   return (
-    <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined" error={error}>
+    <FormControl sx={{ m: 1, width: "100%" }} variant="outlined" error={error}>
       <InputLabel htmlFor={id} error={error}>{inputLabel}</InputLabel>
       <OutlinedInput
         id={id}

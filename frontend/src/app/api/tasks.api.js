@@ -1,3 +1,7 @@
-export async function searchTasks (taskName){
-    //Mandar texto del input y buscar en la bd por coincidencia
+export async function searchTasksList() {
+  return http("/tasks/", {
+    method: "GET",
+    contentType: "application/json",
+    auth: true,
+  });
 }

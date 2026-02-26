@@ -1,11 +1,12 @@
 import { useState } from "react";
+import {useNavigate} from "react-router";
 import { Box, Typography, Divider, Link } from "@mui/material";
 import { login } from "../../api/auth.api";
 import { emailValidation, passwordValidation } from "../../utils/validators";
 import { TextFieldComponent } from "../../shared/components/TextFieldComponent";
 import { ButtonComponent } from "../../shared/components/ButtonComponent";
 import { AlertComponent } from "../../shared/components/AlertComponent";
-import { manageErrors } from "../../utils/errorMessage";
+import { useAuth } from "../../providers/AuthProvider";
 import Logotype from "../../../assets/logotype.png";
 import "./LoginPage.css";
 
@@ -18,7 +19,7 @@ export const LoginPage = () => {
     password: "",
   });
   const [authError, setAuthError] = useState(false);
-
+  const navigate = useNavigate();
   const meetEmailTheRequirements = (email) => {
     const isOK = emailValidation(email);
     //If the email is valid or the field is empty, then update the email value
@@ -39,9 +40,7 @@ export const LoginPage = () => {
 
   //Function that validates wether the password meets the requirements
   const meetPasswordTheRequirements = (password) => {
-    console.log("PASSWORD ENVIADA: ", password);
     const isOK = passwordValidation(password);
-    console.log("LA PASSWORD EN ISOK DA: ", isOK);
     //If the password is valid or the field is empty, then update the password value
     if (password === "") {
       setFieldErrors((prev) => {
@@ -70,11 +69,12 @@ export const LoginPage = () => {
     sendLoginRequest(email, password);
   };
 
+  const { login: saveSession } = useAuth();
   const sendLoginRequest = async (email, password) => {
     try {
       const data = await login({ email, password });
-      console.log('AQUÍ LA DATA: ', data)
-      localStorage.setItem("access_token", data.token);
+      saveSession(data);
+      navigate('/tasks')
     } catch (error) {
       setAuthError(true);
       console.error(error);

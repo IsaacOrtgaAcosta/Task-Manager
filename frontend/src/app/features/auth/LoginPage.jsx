@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 import { Box, Typography, Divider, Link } from "@mui/material";
 import { login } from "../../api/auth.api";
 import { emailValidation, passwordValidation } from "../../utils/validators";
@@ -69,12 +69,18 @@ export const LoginPage = () => {
     sendLoginRequest(email, password);
   };
 
+  const handleSubmit = (e) => {
+    console.log("LE DIO A ENTER");
+    e.preventDefault();
+    validateUserData();
+  };
+
   const { login: saveSession } = useAuth();
   const sendLoginRequest = async (email, password) => {
     try {
       const data = await login({ email, password });
       saveSession(data);
-      navigate('/tasks')
+      navigate("/tasks");
     } catch (error) {
       setAuthError(true);
       console.error(error);
@@ -108,7 +114,7 @@ export const LoginPage = () => {
             Please sign to your account.
           </Typography>
         </Box>
-        <Box sx={{ mt: 5 }}>
+        <Box sx={{ mt: 5 }} component="form" onSubmit={handleSubmit}>
           <Box>
             <TextFieldComponent
               id="loginPage-textFieldEmail"
@@ -136,6 +142,7 @@ export const LoginPage = () => {
           </Box>
           <Box>
             <ButtonComponent
+              type="submit"
               buttonTitle="Sign In"
               size={"large"}
               onClick={validateUserData}
@@ -195,7 +202,12 @@ export const LoginPage = () => {
         >
           <AlertComponent
             severity="error"
-            sx={{ backgroundColor: "var(--primary)", color: "white", display: 'flex', justifyContent: 'center' }}
+            sx={{
+              backgroundColor: "var(--primary)",
+              color: "white",
+              display: "flex",
+              justifyContent: "center",
+            }}
             color="white"
             alertTitle="Error"
             alertDescription="Unable to connect to the server. Please try again."

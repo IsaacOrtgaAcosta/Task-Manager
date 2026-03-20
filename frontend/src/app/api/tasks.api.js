@@ -8,11 +8,18 @@ export async function getTasksList() {
   });
 }
 
+export async function getTaskById(taskId) {
+  return http(`/tasks/${taskId}`, {
+    method: "GET",
+    contentType: "application/json",
+    auth: true,
+  });
+}
 
-export async function deleteTask (taskId){
-  return http(`/task/${taskId}`, {
+export async function deleteTask(taskId) {
+  return http(`/tasks/${taskId}`, {
     method: "DELETE",
     contentType: "application/json",
     auth: true,
-  })
+  });
 }

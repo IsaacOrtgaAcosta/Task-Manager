@@ -4,7 +4,7 @@ const db = require("../../db/migrations/client");
 
 async function getTasksByUser(userId) {
   if (!userId) {
-    throw new HttpError(400, "User_id is required");
+    throw new HttpError(400, "User id is required");
   }
 
   const [rows] = await db.query(
@@ -13,6 +13,33 @@ async function getTasksByUser(userId) {
   );
 
   return { tasks: rows };
+}
+
+async function getTaskByTaskId(taskId, userId) {
+  if (!userId) {
+    throw new HttpError(400, "User id is required");
+  }
+
+  if (!taskId) {
+    throw new HttpError(400, "Task id is required");
+  }
+
+  const id = Number(taskId);
+
+  if (!Number.isInteger(id) || id <=0){
+    throw new HttpError(400, "Invalid task id");
+  }
+
+  const [rows] = await db.query(
+    "SELECT * FROM tasks WHERE id = ? AND user_id = ?",
+    [taskId, userId],
+  );
+
+  if(rows.length === 0){
+    throw new HttpError(404, "Task not found");
+  }
+
+  return { task: rows[0] };
 }
 
 async function deleteTaskById(userId, tasksId) {
@@ -27,7 +54,7 @@ async function deleteTaskById(userId, tasksId) {
     .filter((x) => Number.isInteger(x) && x > 0);
 
   if (cleanIds.length === 0) {
-    throw new HttpError(400, "Task_id is required");
+    throw new HttpError(400, "Task id is required");
   }
 
   for (const id of cleanIds) {
@@ -42,4 +69,4 @@ async function deleteTaskById(userId, tasksId) {
   return { deletedCount };
 }
 
-module.exports = { getTasksByUser, deleteTaskById };
+module.exports = { getTasksByUser, getTaskByTaskId, deleteTaskById };

@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { TasksHeader } from "./TasksHeader";
 import { TasksItem } from "./TasksItem";
 import { TaskSearcher } from "./TaskSearcher";
-import { getTasksList, deleteTask } from "../../api/tasks.api";
+import { getTasksList } from "../../api/tasks.api";
 import './TasksPage.css';
 
 export const TasksPage = () => {
@@ -12,7 +12,6 @@ export const TasksPage = () => {
     // Send request to get Tasks:
     const sendRequestToGetTasks = async () => {
       const result = await getTasksList();
-      console.log('result: ', result.tasks)
       setTasksList(result.tasks);
     };
     sendRequestToGetTasks();
@@ -23,7 +22,7 @@ export const TasksPage = () => {
     <Box sx={{bgColor: 'background.paper', width: '100%', pt: 3}}>
         <TasksHeader />
         <TaskSearcher />
-        <TasksItem tasksList={tasksList} deleteTask={deleteTask}/>
+        <TasksItem tasksList={tasksList}/>
     </Box>
   )}
 }

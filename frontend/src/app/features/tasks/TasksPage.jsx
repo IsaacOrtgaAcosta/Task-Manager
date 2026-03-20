@@ -18,11 +18,12 @@ export const TasksPage = () => {
     sendRequestToGetTasks();
   }, []);
 
-  if(tasksList.length > 0) return <TasksItem tasksList={tasksList} deleteTask={deleteTask}/>
-  return (
+  if(tasksList.length > 0){
+    return(
     <Box sx={{bgColor: 'background.paper', width: '100%', pt: 3}}>
         <TasksHeader />
         <TaskSearcher />
+        <TasksItem tasksList={tasksList} deleteTask={deleteTask}/>
     </Box>
-  )
+  )}
 }

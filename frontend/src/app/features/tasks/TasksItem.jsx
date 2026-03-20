@@ -12,11 +12,13 @@ import {
   MenuItem,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { ModalComponent } from "../../shared/components/ModalComponent";
 
 export const TasksItem = ({ tasksList, deleteTask }) => {
   const [checked, setChecked] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeTaskId, setActiveTaskId] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
   const open = Boolean(anchorEl);
 
   const handleToggle = (value) => () => {
@@ -37,9 +39,18 @@ export const TasksItem = ({ tasksList, deleteTask }) => {
     setActiveTaskId(taskId);
   };
 
-  const handleClose = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+    handleCloseMenu();
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  }
 
   const sendRequestToDeleteTask = async (taskId) => {
     try {
@@ -49,6 +60,7 @@ export const TasksItem = ({ tasksList, deleteTask }) => {
   };
 
   return (
+    <>
     <List dense sx={{ width: "100%", bgcolor: "background.paper" }}>
       {tasksList.map((task) => {
         const labelId = `checkbox-list-secondary-label-${task.title}`;
@@ -99,29 +111,33 @@ export const TasksItem = ({ tasksList, deleteTask }) => {
       <Menu
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={handleCloseMenu}
         slotProps={{
           list: {
             "aria-labelledby": "basic-button",
           },
         }}
       >
-        <MenuItem sx={{ color: "var(--secondary-text)" }} onClick={handleClose}>
+        <MenuItem sx={{ color: "var(--secondary-text)" }} onClick={handleOpenModal}>
           Show
         </MenuItem>
-        <MenuItem sx={{ color: "var(--secondary-text)" }} onClick={handleClose}>
+        <MenuItem sx={{ color: "var(--secondary-text)" }} onClick={handleCloseMenu}>
           Completed
         </MenuItem>
         <MenuItem
           sx={{ color: "var(--error)" }}
           onClick={() => {
             sendRequestToDeleteTask(activeTaskId);
-            handleClose();
+            handleCloseMenu();
           }}
         >
           Delete
         </MenuItem>
       </Menu>
     </List>
+    {openModal && (
+      <ModalComponent open={openModal} onClose={handleCloseModal} modalTitle='Este es el modal' modalText='Este es el texto'/>
+    )}
+    </>
   );
 };

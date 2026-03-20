@@ -70,7 +70,6 @@ export const LoginPage = () => {
   };
 
   const handleSubmit = (e) => {
-    console.log("LE DIO A ENTER");
     e.preventDefault();
     validateUserData();
   };

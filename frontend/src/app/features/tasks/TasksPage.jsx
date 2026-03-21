@@ -22,7 +22,7 @@ export const TasksPage = () => {
     <Box sx={{bgColor: 'background.paper', width: '100%', pt: 3}}>
         <TasksHeader />
         <TaskSearcher />
-        <TasksItem tasksList={tasksList}/>
+        <TasksItem tasksList={tasksList} setTasksList={setTasksList}/>
     </Box>
   )}
 }

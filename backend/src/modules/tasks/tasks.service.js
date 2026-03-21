@@ -42,7 +42,8 @@ async function getTaskByTaskId(taskId, userId) {
   return { task: rows[0] };
 }
 
-async function deleteTaskById(userId, tasksId) {
+async function deleteTaskById(tasksId, userId) {
+  console.log('LLEGA AQUÍ EN EL BACKEND: ', tasksId)
   if (!userId) {
     throw new HttpError(400, "User_id is required");
   }
@@ -57,9 +58,10 @@ async function deleteTaskById(userId, tasksId) {
     throw new HttpError(400, "Task id is required");
   }
 
+  let deletedCount = 0;
   for (const id of cleanIds) {
     const [result] = await db.query(
-      "Delete from tasks Where id = ? AND user_id = ?",
+      "DELETE FROM tasks WHERE id = ? AND user_id = ?",
       [id, userId],
     );
 

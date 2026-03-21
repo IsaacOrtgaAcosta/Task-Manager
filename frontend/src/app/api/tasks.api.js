@@ -17,6 +17,7 @@ export async function getTaskById(taskId) {
 }
 
 export async function deleteTask(taskId) {
+  console.log('LLEGA A LA API: ', taskId)
   return http(`/tasks/${taskId}`, {
     method: "DELETE",
     contentType: "application/json",

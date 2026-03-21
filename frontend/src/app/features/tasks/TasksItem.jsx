@@ -13,6 +13,7 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { ModalComponent } from "../../shared/components/ModalComponent";
 import { getTaskById } from "../../api/tasks.api";
@@ -20,19 +21,18 @@ import { ButtonComponent } from "../../shared/components/ButtonComponent";
 import { formatDate } from "../../utils/formatter";
 import { deleteTask } from "../../api/tasks.api";
 
-export const TasksItem = ({ tasksList }) => {
+export const TasksItem = ({ tasksList, setTasksList }) => {
   const [checked, setChecked] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeTaskId, setActiveTaskId] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [taskSelected, setTaskSelected] = useState({
-    completedAt: "",
+    completedOrDueDate: "",
+    due_date: "",
     createdAt: "",
     description: "",
     id: "",
     title: "",
-    updatedAt: "",
-    user_id: "",
   });
   const open = Boolean(anchorEl);
 
@@ -63,12 +63,12 @@ export const TasksItem = ({ tasksList }) => {
     console.log(result);
     const taskCompleted =
       result.task.completed_at !== null
-        ? result.task.completed_at
-        : "This task is not completed yet";
+        ? `This task was completed at ${formatDate(result.task.completed_at)}`
+        : formatDate(result.task.due_date);
     setTaskSelected((prev) => ({
       ...prev,
       id: result.task.id,
-      completedAt: taskCompleted,
+      completedOrDueDate: taskCompleted,
       title: result.task.title,
       description: result.task.description,
       createdAt: formatDate(result.task.created_at),
@@ -82,15 +82,27 @@ export const TasksItem = ({ tasksList }) => {
   };
 
   const confirmToDelete = async (taskId) => {
-    console.log('ENTRA AQUÍ: ', taskId)
     try {
       await deleteTask(taskId);
-      setTasks((prev) => prev.filter((t) => t.id !== taskId));
+      handleCloseModal();
+      setTasksList((prev) => prev.filter((t) => t.id !== taskId));
     } catch (error) {}
   };
 
+  const handleCheckAllTasks = (allIdTasks ) => {
+
+  }
+
   return (
     <>
+      <ListItem>
+        <ListItemIcon sx={{ pl: 1.5, minWidth: 36 }}>
+          <Checkbox edge="start" 
+          onChange={handleCheckAllTasks()}/>
+        </ListItemIcon>
+        <ListItemText primary="Select all" />
+      </ListItem>
+      <Divider></Divider>
       <List dense sx={{ width: "100%", bgcolor: "background.paper" }}>
         {tasksList.map((task) => {
           const labelId = `checkbox-list-secondary-label-${task.title}`;
@@ -175,7 +187,6 @@ export const TasksItem = ({ tasksList }) => {
         <ModalComponent
           open={openModal}
           onClose={handleCloseModal}
-          title={taskSelected.title}
           actions={
             <>
               <Grid
@@ -209,7 +220,7 @@ export const TasksItem = ({ tasksList }) => {
                 <Grid size={5}>
                   <ButtonComponent
                     type="submit"
-                    buttonTitle="Edit"
+                    buttonTitle="Completed"
                     size={"large"}
                     sx={{
                       width: "100%",
@@ -227,27 +238,46 @@ export const TasksItem = ({ tasksList }) => {
           }
         >
           <>
-            <Box sx={{ mt: 4 }}>
-              <Typography sx={{ fontWeight: "500", textDecoration: 'underline' }} component="h5">
-                Description of the task:
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                {taskSelected.title}
               </Typography>
+              <EditIcon />
+            </Box>
+            <Divider sx={{ m: 4 }}></Divider>
+            <Box sx={{ mt: 4 }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography
+                  sx={{ fontWeight: "500", textDecoration: "underline" }}
+                  component="h5"
+                >
+                  Description of the task:
+                </Typography>
+                <EditIcon />
+              </Box>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 {taskSelected.description}
               </Typography>
             </Box>
-            <Divider sx={{mt: 4}}></Divider>
+            <Divider sx={{ mt: 4 }}></Divider>
             <Box sx={{ mt: 4 }}>
               <Typography>
-                <Typography sx={{ fontWeight: "500", textDecoration: 'underline' }} component="span">
-                  Created At:
+                <Typography
+                  sx={{ fontWeight: "500", textDecoration: "underline" }}
+                  component="span"
+                >
+                  Created at:
                 </Typography>
                 &nbsp;{taskSelected.createdAt}
               </Typography>
-              <Typography sx={{mt: 2}}>
-                <Typography sx={{ fontWeight: "500", textDecoration: 'underline'  }} component="span">
-                  Completed at:
+              <Typography sx={{ mt: 2 }}>
+                <Typography
+                  sx={{ fontWeight: "500", textDecoration: "underline" }}
+                  component="span"
+                >
+                  Due date:
                 </Typography>
-                &nbsp;{taskSelected.completedAt}
+                &nbsp;{taskSelected.completedOrDueDate}
               </Typography>
             </Box>
           </>

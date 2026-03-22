@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const asyncHandler = require('../../utils/asyncHandler');
-const { getTasksByUser, getTaskByTaskId, deleteTaskById } = require('./tasks.service');
+const { getTasksByUser, getTaskByTaskId, deleteTaskById, updateTaskById } = require('./tasks.service');
 const authRequired = require('../../middlewares/authRequired');
 
 router.use(authRequired);
@@ -31,6 +31,17 @@ router.delete(
         const userId = req.user.id;
         const taskId = req.params.id;
         const result = await deleteTaskById(taskId, userId);
+        res.status(200).json(result);
+    })
+)
+
+router.patch(
+    '/:id',
+    asyncHandler(async(req, res) => {
+        const userId = req.user.id;
+        const taskId = req.params.id;
+        const updates = req.body;
+        const result = await updateTaskById(userId, taskId, updates);
         res.status(200).json(result);
     })
 )

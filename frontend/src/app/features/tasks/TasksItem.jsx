@@ -10,16 +10,15 @@ import {
   Button,
   Menu,
   MenuItem,
-  Typography,
   Grid,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { ModalComponent } from "../../shared/components/ModalComponent";
 import { getTaskById } from "../../api/tasks.api";
 import { ButtonComponent } from "../../shared/components/ButtonComponent";
 import { formatDate } from "../../utils/formatter";
 import { deleteTask } from "../../api/tasks.api";
+import { TaskInformation } from "./TaskInformation";
 
 export const TasksItem = ({ tasksList, setTasksList }) => {
   const [checked, setChecked] = useState([]);
@@ -89,16 +88,15 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
     } catch (error) {}
   };
 
-  const handleCheckAllTasks = (allIdTasks ) => {
-
-  }
+  const handleCheckAllTasks = (allIdTasks) => {
+    // Check all task when is pressend
+  };
 
   return (
     <>
       <ListItem>
         <ListItemIcon sx={{ pl: 1.5, minWidth: 36 }}>
-          <Checkbox edge="start" 
-          onChange={handleCheckAllTasks()}/>
+          <Checkbox edge="start" onChange={handleCheckAllTasks()} />
         </ListItemIcon>
         <ListItemText primary="Select all" />
       </ListItem>
@@ -238,48 +236,7 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
           }
         >
           <>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                {taskSelected.title}
-              </Typography>
-              <EditIcon />
-            </Box>
-            <Divider sx={{ m: 4 }}></Divider>
-            <Box sx={{ mt: 4 }}>
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography
-                  sx={{ fontWeight: "500", textDecoration: "underline" }}
-                  component="h5"
-                >
-                  Description of the task:
-                </Typography>
-                <EditIcon />
-              </Box>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                {taskSelected.description}
-              </Typography>
-            </Box>
-            <Divider sx={{ mt: 4 }}></Divider>
-            <Box sx={{ mt: 4 }}>
-              <Typography>
-                <Typography
-                  sx={{ fontWeight: "500", textDecoration: "underline" }}
-                  component="span"
-                >
-                  Created at:
-                </Typography>
-                &nbsp;{taskSelected.createdAt}
-              </Typography>
-              <Typography sx={{ mt: 2 }}>
-                <Typography
-                  sx={{ fontWeight: "500", textDecoration: "underline" }}
-                  component="span"
-                >
-                  Due date:
-                </Typography>
-                &nbsp;{taskSelected.completedOrDueDate}
-              </Typography>
-            </Box>
+            <TaskInformation taskSelected={taskSelected}/>
           </>
         </ModalComponent>
       )}

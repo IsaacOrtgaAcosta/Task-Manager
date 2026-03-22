@@ -17,10 +17,20 @@ export async function getTaskById(taskId) {
 }
 
 export async function deleteTask(taskId) {
-  console.log('LLEGA A LA API: ', taskId)
   return http(`/tasks/${taskId}`, {
     method: "DELETE",
     contentType: "application/json",
     auth: true,
+  });
+}
+
+export async function updateTask(taskId, updates) {
+  console.log("Llega el task id: ", taskId);
+  console.log("Llega el texto: ", updates);
+  return http(`/tasks/${taskId}`, {
+    method: "PATCH",
+    contentType: "application/json",
+    auth: true,
+    body: updates,
   });
 }

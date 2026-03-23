@@ -43,7 +43,6 @@ async function getTaskByTaskId(taskId, userId) {
 }
 
 async function deleteTaskById(tasksId, userId) {
-  console.log('LLEGA AQUÍ EN EL BACKEND: ', tasksId)
   if (!userId) {
     throw new HttpError(400, "User_id is required");
   }
@@ -71,4 +70,23 @@ async function deleteTaskById(tasksId, userId) {
   return { deletedCount };
 }
 
-module.exports = { getTasksByUser, getTaskByTaskId, deleteTaskById };
+async function updateTaskById(userId, taskId, updates){
+  if(!userId){
+    throw new HttpError(400, "User_id is required");
+  }
+
+  let setValue = '';
+  if(updates.typeOfField === "description"){
+    setValue = "description";
+  }else if(updates.typeOfField === 'title'){
+    setValue = "title"; 
+  }
+
+  await db.query(
+    `UPDATE tasks SET ${setValue} = ? WHERE user_id = ? AND id = ?`,
+    [updates.newValue, userId, taskId]
+  )
+
+}
+
+module.exports = { getTasksByUser, getTaskByTaskId, deleteTaskById, updateTaskById };

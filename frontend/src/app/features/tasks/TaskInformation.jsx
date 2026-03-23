@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import { Box, Typography, Divider, boxClasses } from "@mui/material";
 import { EditableTaskField } from "./EditableTaskField";
 
-export const TaskInformation = ({ taskSelected }) => {
+export const TaskInformation = ({ taskSelected, setOpenModal }) => {
   const [editTitle, setEditTitle] = useState(false);
   const [editDescription, setEditDescription] = useState(false);
+  const [taskData, setTaskData] = useState(taskSelected);
+
+  useEffect(() => {
+    setTaskData(taskSelected);
+  }, [taskSelected])
 
   return (
     <Box>
@@ -13,15 +18,18 @@ export const TaskInformation = ({ taskSelected }) => {
         {editTitle ? (
           <Box sx={{ mt: 2 }}>
             <EditableTaskField
-              value={taskSelected.title}
-              idTaskRecived={taskSelected.id}
+              value={taskData.title}
+              idTaskRecived={taskData.id}
               typeOfField={"title"}
+              setOpenModal={setOpenModal}
+              setEditTitle={setEditTitle}
+              setTaskData={setTaskData}
             />
           </Box>
         ) : (
           <>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              {taskSelected.title}
+              {taskData.title}
             </Typography>
             <EditIcon
               sx={{ cursor: "pointer" }}
@@ -47,14 +55,17 @@ export const TaskInformation = ({ taskSelected }) => {
         {editDescription ? (
           <Box sx={{ mt: 2 }}>
             <EditableTaskField
-              value={taskSelected.description}
-              idTaskRecived={taskSelected.id}
+              value={taskData.description}
+              idTaskRecived={taskData.id}
               typeOfField={"description"}
+              setOpenModal={setOpenModal}
+              setEditDescription={setEditDescription}
+              setTaskData={setTaskData}
             />
           </Box>
         ) : (
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {taskSelected.description}
+            {taskData.description}
           </Typography>
         )}
       </Box>

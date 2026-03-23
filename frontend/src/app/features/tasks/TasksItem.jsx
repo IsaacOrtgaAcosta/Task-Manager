@@ -21,6 +21,7 @@ import { deleteTask } from "../../api/tasks.api";
 import { TaskInformation } from "./TaskInformation";
 
 export const TasksItem = ({ tasksList, setTasksList }) => {
+  const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeTaskId, setActiveTaskId] = useState(null);
@@ -236,7 +237,7 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
           }
         >
           <>
-            <TaskInformation taskSelected={taskSelected}/>
+            <TaskInformation taskSelected={taskSelected} setOpenModal={setOpenModal}/>
           </>
         </ModalComponent>
       )}

@@ -1,28 +1,38 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Box } from "@mui/material";
 import { TasksHeader } from "./TasksHeader";
 import { TasksItem } from "./TasksItem";
 import { TaskSearcher } from "./TaskSearcher";
 import { getTasksList } from "../../api/tasks.api";
-import './TasksPage.css';
+import "./TasksPage.css";
 
 export const TasksPage = () => {
   const [tasksList, setTasksList] = useState([]);
-  useEffect(() => {
-    // Send request to get Tasks:
-    const sendRequestToGetTasks = async () => {
+  // Send request to get Tasks:
+  const fetchTasks = useCallback(async () => {
+    try {
       const result = await getTasksList();
       setTasksList(result.tasks);
-    };
-    sendRequestToGetTasks();
+    } catch (error) {
+      console.error("Error fetching tasks: ", error);
+    }
   }, []);
 
-  if(tasksList.length > 0){
-    return(
-    <Box sx={{bgColor: 'background.paper', width: '100%', pt: 3}}>
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
+
+  if (tasksList.length > 0) {
+    return (
+      <Box sx={{ bgColor: "background.paper", width: "100%", pt: 3 }}>
         <TasksHeader />
         <TaskSearcher />
-        <TasksItem tasksList={tasksList} setTasksList={setTasksList}/>
-    </Box>
-  )}
-}
+        <TasksItem
+          tasksList={tasksList}
+          setTasksList={setTasksList}
+          fetchTasks={fetchTasks}
+        />
+      </Box>
+    );
+  }
+};

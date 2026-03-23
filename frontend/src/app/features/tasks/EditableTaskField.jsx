@@ -21,7 +21,6 @@ export const EditableTaskField = ({
   }, [value]);
 
   const saveTaskModification = async () => {
-    console.log('newValue: ', newValue)
     try {
       setLoading(true);
       await updateTask(idTaskRecived, {

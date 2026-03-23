@@ -1,4 +1,7 @@
+import { useState } from "react";
 import { Box, Typography, Modal, Divider } from "@mui/material";
+import { ButtonComponent } from "./ButtonComponent";
+import { ChildModalComponent } from "./ChildModalComponent";
 
 const style = {
   position: "absolute",
@@ -12,8 +15,17 @@ const style = {
   p: 4,
 };
 
-export const ModalComponent = ({ open, onClose, children, actions }) => {
-
+export const ModalComponent = ({
+  open,
+  onClose,
+  children,
+  actions,
+  subModalTitle,
+  subModalText,
+  openChildModal = false,
+  setOpenChildModal,
+  subModalActions
+}) => {
 
   return (
     <Box>
@@ -23,10 +35,23 @@ export const ModalComponent = ({ open, onClose, children, actions }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>    
+        <Box sx={style}>
           {children}
-          <Divider sx={{ mt: 4}}></Divider>
-         {actions}
+          <Divider sx={{ mt: 4 }}></Divider>
+          {actions}
+          {openChildModal ? (
+            <Box>
+              <ChildModalComponent
+                subModalTitle={subModalTitle}
+                subModalText={subModalText}
+                openChildModal={openChildModal}
+                setOpenChildModal={setOpenChildModal}
+                subModalActions={subModalActions}
+              />
+            </Box>
+          ) : (
+            ""
+          )}
         </Box>
       </Modal>
     </Box>

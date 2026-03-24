@@ -11,7 +11,7 @@ export const EditableTaskField = ({
   typeOfField,
   setEditTitle,
   setEditDescription,
-  setTaskData
+  setTaskData,
 }) => {
   const [loading, setLoading] = useState(false);
   const [newValue, setNewValue] = useState(value);
@@ -21,8 +21,8 @@ export const EditableTaskField = ({
   }, [value]);
 
   const saveTaskModification = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       await updateTask(idTaskRecived, {
         newValue,
         typeOfField,

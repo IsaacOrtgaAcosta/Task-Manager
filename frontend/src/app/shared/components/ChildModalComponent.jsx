@@ -15,12 +15,13 @@ const style = {
 };
 
 export const ChildModalComponent = ({
-  subModalTitle,
-  subModalText,
   openChildModal,
   setOpenChildModal,
-  subModalActions,
+  childModalProps,
 }) => {
+  const title = childModalProps. title;
+  const text = childModalProps.text;
+  const actions = childModalProps.actions;
   return (
     <>
       <Modal
@@ -30,9 +31,9 @@ export const ChildModalComponent = ({
         aria-describedby="child-modal-description"
       >
         <Box sx={{ ...style, width: 200 }}>
-          <h2 id="child-modal-title">{subModalTitle}</h2>
-          <p id="child-modal-description">{subModalText}</p>
-        {subModalActions}
+          <h2 id="child-modal-title">{title}</h2>
+          <p id="child-modal-description">{text}</p>
+        {actions}
         </Box>
       </Modal>
     </>

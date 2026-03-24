@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { Box, Typography, Modal, Divider } from "@mui/material";
-import { ButtonComponent } from "./ButtonComponent";
+import { Box, Modal, Divider } from "@mui/material";
 import { ChildModalComponent } from "./ChildModalComponent";
 
 const style = {
@@ -20,11 +18,7 @@ export const ModalComponent = ({
   onClose,
   children,
   actions,
-  subModalTitle,
-  subModalText,
-  openChildModal = false,
-  setOpenChildModal,
-  subModalActions
+
 }) => {
 
   return (
@@ -39,19 +33,6 @@ export const ModalComponent = ({
           {children}
           <Divider sx={{ mt: 4 }}></Divider>
           {actions}
-          {openChildModal ? (
-            <Box>
-              <ChildModalComponent
-                subModalTitle={subModalTitle}
-                subModalText={subModalText}
-                openChildModal={openChildModal}
-                setOpenChildModal={setOpenChildModal}
-                subModalActions={subModalActions}
-              />
-            </Box>
-          ) : (
-            ""
-          )}
         </Box>
       </Modal>
     </Box>

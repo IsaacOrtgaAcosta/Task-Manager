@@ -80,6 +80,12 @@ async function updateTaskById(userId, taskId, updates){
     setValue = "description";
   }else if(updates.typeOfField === 'title'){
     setValue = "title"; 
+  }else if(updates.typeOfField === 'complete'){
+     await db.query(
+      `UPDATE tasks SET completed_at = NOW() WHERE user_id = ? AND id = ?`,
+      [userId, taskId]
+    );
+    return;
   }
 
   await db.query(

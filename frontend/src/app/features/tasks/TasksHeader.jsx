@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { ButtonComponent } from "../../shared/components/ButtonComponent";
+import AddIcon from '@mui/icons-material/Add';
 
 export const TasksHeader = () => {
-  const buttonTitle = <MoreHorizIcon />;
+  const buttonTitle = <AddIcon />;
   return (
     <Box
       sx={{

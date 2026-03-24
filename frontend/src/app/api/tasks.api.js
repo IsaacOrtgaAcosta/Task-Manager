@@ -25,6 +25,7 @@ export async function deleteTask(taskId) {
 }
 
 export async function updateTask(taskId, updates) {
+  console.log('updates: ', updates);
   return http(`/tasks/${taskId}`, {
     method: "PATCH",
     contentType: "application/json",

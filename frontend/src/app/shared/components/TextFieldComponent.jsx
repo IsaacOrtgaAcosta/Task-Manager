@@ -16,7 +16,7 @@ export const TextFieldComponent = ({
   onTogglePassword,
   endAdornment = false,
   error=false,
-  helperText,
+  helperText="",
   ...rest
 }) => {
   const isPassword = type === "password";

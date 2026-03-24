@@ -10,7 +10,7 @@ export const TaskInformation = ({ taskSelected, setOpenModal }) => {
 
   useEffect(() => {
     setTaskData(taskSelected);
-  }, [taskSelected])
+  }, [taskSelected]);
 
   return (
     <Box>
@@ -47,10 +47,14 @@ export const TaskInformation = ({ taskSelected, setOpenModal }) => {
           >
             Description of the task:
           </Typography>
-          <EditIcon
-            sx={{ cursor: "pointer" }}
-            onClick={() => setEditDescription(true)}
-          />
+          {!editDescription ? (
+            <EditIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => setEditDescription(true)}
+            />
+          ) : (
+            ""
+          )}
         </Box>
         {editDescription ? (
           <Box sx={{ mt: 2 }}>

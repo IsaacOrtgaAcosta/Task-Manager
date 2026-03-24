@@ -19,6 +19,8 @@ import { ButtonComponent } from "../../shared/components/ButtonComponent";
 import { formatDate } from "../../utils/formatter";
 import { deleteTask } from "../../api/tasks.api";
 import { TaskInformation } from "./TaskInformation";
+import { ChildModalComponent } from "../../shared/components/ChildModalComponent";
+import { SpinnerComponent } from "../../shared/components/SpinnerComponent";
 
 export const TasksItem = ({ tasksList, setTasksList }) => {
   const [loading, setLoading] = useState(false);
@@ -26,6 +28,7 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeTaskId, setActiveTaskId] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [openChildModal, setOpenChildModal] = useState(false);
   const [taskSelected, setTaskSelected] = useState({
     completedOrDueDate: "",
     due_date: "",
@@ -58,7 +61,7 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
     setAnchorEl(null);
   };
 
-  const handleOpenModal = async () => {
+  const getTaskData = async () => {
     const result = await getTaskById(activeTaskId);
     console.log(result);
     const taskCompleted =
@@ -73,21 +76,52 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
       description: result.task.description,
       createdAt: formatDate(result.task.created_at),
     }));
-    setOpenModal(true);
-    handleCloseMenu();
+  };
+
+  const handleOpenModal = async () => {
+    try {
+      await getTaskData();
+      setOpenModal(true);
+      handleCloseMenu();
+    } catch (error) {
+      console.error("An error ocurred trying get data from the task", error);
+    }
+  };
+
+    const askAfterDelete = async () => {
+    try {
+      await getTaskData();
+      setOpenChildModal(true);
+      handleCloseMenu();
+    } catch (error) {
+      console.error("An error ocurred trying get data from the task", error);
+    }
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
   };
 
-  const confirmToDelete = async (taskId) => {
+  const handleCloseChildModal = () => {
+    setOpenChildModal(false);
+  };
+
+  const confirmedToDeleteTask = async (taskId) => {
+    console.log("Entrando para eliminar: ", taskId);
+    setLoading(true);
     try {
       await deleteTask(taskId);
+      handleCloseChildModal();
       handleCloseModal();
       setTasksList((prev) => prev.filter((t) => t.id !== taskId));
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error trying to delete the task", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+
 
   const handleCheckAllTasks = (allIdTasks) => {
     // Check all task when is pressend
@@ -174,8 +208,8 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
           <MenuItem
             sx={{ color: "var(--error)" }}
             onClick={() => {
-              confirmToDelete(activeTaskId);
-              handleCloseMenu();
+              askAfterDelete();
+              // handleCloseMenu();
             }}
           >
             Delete
@@ -204,7 +238,7 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
                     type="submit"
                     buttonTitle="Delete"
                     size={"large"}
-                    onClick={() => confirmToDelete(taskSelected.id)}
+                    onClick={() => askAfterDelete(taskSelected.id)}
                     sx={{
                       width: "100%",
                       height: "50px",
@@ -237,10 +271,33 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
           }
         >
           <>
-            <TaskInformation taskSelected={taskSelected} setOpenModal={setOpenModal}/>
+            <TaskInformation
+              taskSelected={taskSelected}
+              setOpenModal={setOpenModal}
+            />
           </>
         </ModalComponent>
       )}
+      {openChildModal && (
+        <ChildModalComponent
+          subModalTitle={"Confirm before delete"}
+          subModalText={`Do you want to delete the task: ${taskSelected.id}`}
+          openChildModal={openChildModal}
+          setOpenChildModal={setOpenChildModal}
+          subModalActions={
+            <>
+              <Button
+                onClick={() => {
+                  confirmedToDeleteTask(taskSelected.id);
+                }}
+              >
+                Confirm
+              </Button>
+            </>
+          }
+        />
+      )}
+      {loading && <SpinnerComponent />}
     </>
   );
 };

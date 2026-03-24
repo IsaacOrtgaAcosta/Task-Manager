@@ -1,11 +1,22 @@
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
-export const SpinnerComponent = (loading) => {
-  
+export const SpinnerComponent = () => {
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 9999999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
       <CircularProgress />
     </Box>
   );
-}
+};

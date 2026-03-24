@@ -1,4 +1,5 @@
-import { Box, Typography, Modal, Divider } from "@mui/material";
+import { Box, Modal, Divider } from "@mui/material";
+import { ChildModalComponent } from "./ChildModalComponent";
 
 const style = {
   position: "absolute",
@@ -12,8 +13,13 @@ const style = {
   p: 4,
 };
 
-export const ModalComponent = ({ open, onClose, children, actions }) => {
+export const ModalComponent = ({
+  open,
+  onClose,
+  children,
+  actions,
 
+}) => {
 
   return (
     <Box>
@@ -23,10 +29,10 @@ export const ModalComponent = ({ open, onClose, children, actions }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>    
+        <Box sx={style}>
           {children}
-          <Divider sx={{ mt: 4}}></Divider>
-         {actions}
+          <Divider sx={{ mt: 4 }}></Divider>
+          {actions}
         </Box>
       </Modal>
     </Box>

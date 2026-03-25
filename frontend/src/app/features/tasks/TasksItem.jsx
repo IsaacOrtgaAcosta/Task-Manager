@@ -21,6 +21,7 @@ import { deleteTask, updateTask } from "../../api/tasks.api";
 import { TaskInformation } from "./TaskInformation";
 import { ChildModalComponent } from "../../shared/components/ChildModalComponent";
 import { SpinnerComponent } from "../../shared/components/SpinnerComponent";
+import { TaskActionsMenu } from "./TaskActionsMenu";
 
 export const TasksItem = ({ tasksList, setTasksList }) => {
   const [loading, setLoading] = useState(false);
@@ -167,6 +168,7 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
         typeOfField,
         newValue,
       });
+      setTasksList((prev) => prev.filter((t) => t.id !== taskId));
     } catch (error) {
       console.error("Error updating the task", error);
     } finally {
@@ -179,14 +181,49 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
     // Check all task when is pressend
   };
 
+  const menuTaskItems = [
+    {
+      id: "show",
+      label: "Show",
+      onClick: () => handleOpenModal(),
+      color: "var(--secondary-text",
+    },
+    {
+      id: "complete",
+      label: "Complete",
+      onClick: () => askAfterComplete(activeTaskId),
+      color: "var(--secondary-text)",
+    },
+    {
+      id: "delete",
+      label: "Delete",
+      onClick: askAfterDelete,
+      color: "var(--error)",
+    },
+  ];
+
   return (
     <>
-      <ListItem>
-        <ListItemIcon sx={{ pl: 1.5, minWidth: 36 }}>
-          <Checkbox edge="start" onChange={handleCheckAllTasks()} />
-        </ListItemIcon>
-        <ListItemText primary="Select all" />
-      </ListItem>
+      <Fragment>
+        <ListItem
+          secondaryAction={
+            <Box>
+              <Button
+                aria-controls={open ? "basic-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+              >
+                <MoreHorizIcon sx={{ color: "var(--secondary)" }} />
+              </Button>
+            </Box>
+          }
+        >
+          <ListItemIcon sx={{ pl: 1.5, minWidth: 36 }}>
+            <Checkbox edge="start" onChange={handleCheckAllTasks()} />
+          </ListItemIcon>
+          <ListItemText primary="Select all" />
+        </ListItem>
+      </Fragment>
       <Divider></Divider>
       <List dense sx={{ width: "100%", bgcolor: "background.paper" }}>
         {tasksList.map((task) => {
@@ -246,37 +283,13 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
             </Fragment>
           );
         })}
-        <Menu
+        <TaskActionsMenu
           anchorEl={anchorEl}
           open={open}
           onClose={handleCloseMenu}
-          slotProps={{
-            list: {
-              "aria-labelledby": "basic-button",
-            },
-          }}
-        >
-          <MenuItem
-            sx={{ color: "var(--secondary-text)" }}
-            onClick={handleOpenModal}
-          >
-            Show
-          </MenuItem>
-          <MenuItem
-            sx={{ color: "var(--secondary-text)" }}
-            onClick={() => askAfterComplete(activeTaskId)}
-          >
-            Completed
-          </MenuItem>
-          <MenuItem
-            sx={{ color: "var(--error)" }}
-            onClick={() => {
-              askAfterDelete();
-            }}
-          >
-            Delete
-          </MenuItem>
-        </Menu>
+          items={menuTaskItems}
+          menuListAriaLabelledby={"basic-button"}
+        />
       </List>
       {openModal && (
         <ModalComponent

@@ -10,16 +10,14 @@ import { useAuth } from "../../providers/AuthProvider";
 import Logotype from "../../../assets/logotype.png";
 import "./LoginPage.css";
 
-export const LoginPage = () => {
-  const [showPassword, setShowPassowrd] = useState(false);
-  const [password, setPassword] = useState("");
+export const LogUpPage = () => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState({
     email: "",
     password: "",
   });
-  const [authError, setAuthError] = useState(false);
-  const navigate = useNavigate();
+
   const meetEmailTheRequirements = (email) => {
     const isOK = emailValidation(email);
     //If the email is valid or the field is empty, then update the email value
@@ -60,37 +58,6 @@ export const LoginPage = () => {
     }
   };
 
-  const onTogglePassword = () =>
-    setShowPassowrd((showPassword) => !showPassword);
-
-  const validateUserData = () => {
-    if (emailValidation(email) === false) return;
-    if (passwordValidation(password) === false) return;
-    sendLoginRequest(email, password);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    validateUserData();
-  };
-
-  const { login: saveSession } = useAuth();
-  const sendLoginRequest = async (email, password) => {
-    try {
-      const data = await login({ email, password });
-      saveSession(data);
-      navigate("/tasks");
-    } catch (error) {
-      setAuthError(true);
-      console.error(error);
-    }
-  };
-
-  const navigateToLogUpPage = () => {
-    console.log('LE DI AL REGISTRO')
-    navigate("/log-up");
-  };
-
   return (
     <Box className="loginPage-container">
       <Box className="loginPage-content">
@@ -104,7 +71,7 @@ export const LoginPage = () => {
             sx={{ fontSize: "38px", fontWeight: "bold", mt: 5 }}
             className="loginPage-title"
           >
-            Wellcome Back
+            Wellcome
           </Typography>
           <Typography
             sx={{

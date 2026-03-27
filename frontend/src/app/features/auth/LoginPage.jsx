@@ -144,7 +144,6 @@ export const LoginPage = () => {
               type="submit"
               buttonTitle="Sign In"
               size={"large"}
-              onClick={validateUserData}
               sx={{
                 width: "100%",
                 height: "50px",

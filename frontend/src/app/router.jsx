@@ -6,12 +6,9 @@ import { LogUpPage } from "./features/auth/LogUpPage";
 
 export const router = createBrowserRouter([
   { path: "/", element: <LoginPage /> },
+  { path: "/log-up", element: <LogUpPage /> },
   {
     element: <AppLayout />,
     children: [{ path: "/tasks", element: <TasksPage /> }],
   },
-  {
-    element: <AppLayout />,
-    children: [{ path: "/log-up", element: <LogUpPage />}],
-  }
 ]);

@@ -184,6 +184,7 @@ export const LoginPage = () => {
                   color: "var(--primary)",
                   textDecorationColor: "var(--primary)",
                   fontWeight: "bold",
+                  cursor: 'pointer'
                 }}
               >
                 Register

@@ -1,22 +1,43 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Box, Typography, Divider, Link } from "@mui/material";
-import { login } from "../../api/auth.api";
 import { emailValidation, passwordValidation } from "../../utils/validators";
 import { TextFieldComponent } from "../../shared/components/TextFieldComponent";
 import { ButtonComponent } from "../../shared/components/ButtonComponent";
 import { AlertComponent } from "../../shared/components/AlertComponent";
 import { useAuth } from "../../providers/AuthProvider";
+import PersonIcon from "@mui/icons-material/Person";
 import Logotype from "../../../assets/logotype.png";
 import "./LoginPage.css";
 
 export const LogUpPage = () => {
+  const [showPassword, setShowPassowrd] = useState(false);
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [secondPassword, setSecondPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState({
+    name: "",
+    lastName: "",
     email: "",
     password: "",
   });
+  const [authError, setAuthError] = useState(false);
+
+  const validateUserData = () => {
+    if (emailValidation(email) === false) return;
+    if (passwordValidation(password) === false) return;
+    sendLoginRequest(email, password);
+  };
+
+  const onTogglePassword = () =>
+    setShowPassowrd((showPassword) => !showPassword);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    validateUserData();
+  };
 
   const meetEmailTheRequirements = (email) => {
     const isOK = emailValidation(email);
@@ -82,10 +103,32 @@ export const LogUpPage = () => {
               color: "var(--secondary-text)",
             }}
           >
-            Please sign to your account.
+            Sign up to start managing your tasks
           </Typography>
         </Box>
         <Box sx={{ mt: 5 }} component="form" onSubmit={handleSubmit}>
+          <Box>
+            <TextFieldComponent
+              id="loginPage-textFieldEmail"
+              inputLabel="Name"
+              type="Name"
+              value={name}
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={(e) => meetEmailTheRequirements(e.target.value)}
+              helperText={fieldErrors.name}
+            />
+          </Box>
+          <Box>
+            <TextFieldComponent
+              id="loginPage-textFieldEmail"
+              inputLabel="Last name"
+              type="lastName"
+              value={lastName}
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={(e) => meetEmailTheRequirements(e.target.value)}
+              helperText={fieldErrors.lastName}
+            />
+          </Box>
           <Box>
             <TextFieldComponent
               id="loginPage-textFieldEmail"
@@ -111,6 +154,19 @@ export const LogUpPage = () => {
               helperText={fieldErrors.password}
             />
           </Box>
+          <Box sx={{ mt: 4 }}>
+            <TextFieldComponent
+              id="loginPage-textFieldPassword"
+              inputLabel="Repeat the password"
+              type="password"
+              value={secondPassword}
+              onChange={(e) => setPassword(e.target.value)}
+              onBlur={(e) => meetPasswordTheRequirements(e.target.value)}
+              endAdornment={true}
+              showPassword={showPassword}
+              onTogglePassword={onTogglePassword}
+            />
+          </Box>
           <Box>
             <ButtonComponent
               type="submit"
@@ -131,32 +187,22 @@ export const LogUpPage = () => {
         <Box sx={{ mt: 3, width: "100%" }}>
           <Divider />
         </Box>
-        <Box sx={{ mt: 5 }}>
-          <Box>
+        <Box sx={{ mt: 3, mb: 3 }}>
+          <Typography
+            sx={{ color: "var(--secondary-text)", textDecoration: "none" }}
+          >
+            Do you already have an account?{" "}
             <Link
-              href="#"
-              sx={{ color: "var(--secondary-text)", textDecoration: "none" }}
+              onClick={() => {}}
+              sx={{
+                color: "var(--primary)",
+                textDecorationColor: "var(--primary)",
+                fontWeight: "bold",
+              }}
             >
-              Forgot your password?
+              Log-in
             </Link>
-          </Box>
-          <Box sx={{ mt: 3 }}>
-            <Typography
-              sx={{ color: "var(--secondary-text)", textDecoration: "none" }}
-            >
-              Don't have an account?{" "}
-              <Link
-                onClick={navigateToLogUpPage}
-                sx={{
-                  color: "var(--primary)",
-                  textDecorationColor: "var(--primary)",
-                  fontWeight: "bold",
-                }}
-              >
-                Register
-              </Link>
-            </Typography>
-          </Box>
+          </Typography>
         </Box>
       </Box>
       {authError && (

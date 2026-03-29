@@ -9,10 +9,13 @@ import {
 import { TextFieldComponent } from "../../shared/components/TextFieldComponent";
 import { ButtonComponent } from "../../shared/components/ButtonComponent";
 import { AlertComponent } from "../../shared/components/AlertComponent";
+import { SpinnerComponent } from "../../shared/components/SpinnerComponent";
 import Logotype from "../../../assets/logotype.png";
 import "./LoginPage.css";
+import { logup } from "../../api/auth.api";
 
 export const LogUpPage = () => {
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showSecondPassword, setShowSecondPassword] = useState(false);
   const [name, setName] = useState("");
@@ -29,6 +32,11 @@ export const LogUpPage = () => {
     passwordMatch: "",
   });
   const [authError, setAuthError] = useState(false);
+  const navigate = useNavigate();
+
+  const comebackToLoginPage = () => {
+    navigate("/");
+  };
 
   const validateUserData = () => {
     if (emailValidation(email) === false) return;
@@ -38,8 +46,30 @@ export const LogUpPage = () => {
         return { ...prev, passwordMatch: "Passwords must match" };
       });
     }
-    sendLoginRequest(email, password);
+    if (
+      email !== "" &&
+      name !== "" &&
+      password !== "" &&
+      secondPassword !== ""
+    ) {
+      sendLogupRequest(email, name, lastName, password);
+    }else{
+      setLoading(false);
+    }
   };
+
+  const sendLogupRequest = async (email, name, lastName, password) => {
+    setLoading(true);
+    try {
+      await logup({email, name, lastName, password})
+    } catch (error) {
+      console.error('Error with the registration', error);
+      setAuthError(true);
+    }finally{
+      navigate("/tasks");
+      setLoading(false);
+    }
+  }
 
   const validateIfPasswordsMatch = () => {
     if (passwordsMatch(password, secondPassword) === false) {
@@ -82,6 +112,7 @@ export const LogUpPage = () => {
       });
     }
   };
+  
 
   //Function that validates wether the password meets the requirements
   const meetPasswordTheRequirements = (password) => {
@@ -136,31 +167,7 @@ export const LogUpPage = () => {
           <Box>
             <TextFieldComponent
               id="loginPage-textFieldEmail"
-              inputLabel="Name"
-              type="Name"
-              value={name}
-              onChange={(e) => setEmail(e.target.value)}
-              onBlur={(e) => meetEmailTheRequirements(e.target.value)}
-              helperText={fieldErrors.name}
-              fullWidth
-            />
-          </Box>
-          <Box>
-            <TextFieldComponent
-              id="loginPage-textFieldEmail"
-              inputLabel="Last name"
-              type="lastName"
-              value={lastName}
-              onChange={(e) => setEmail(e.target.value)}
-              onBlur={(e) => meetEmailTheRequirements(e.target.value)}
-              helperText={fieldErrors.lastName}
-              fullWidth
-            />
-          </Box>
-          <Box>
-            <TextFieldComponent
-              id="loginPage-textFieldEmail"
-              inputLabel="Email"
+              inputLabel="Email *"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -171,8 +178,30 @@ export const LogUpPage = () => {
           </Box>
           <Box>
             <TextFieldComponent
+              id="loginPage-textFieldEmail"
+              inputLabel="Name *"
+              type="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              helperText={fieldErrors.name}
+              fullWidth
+            />
+          </Box>
+          <Box>
+            <TextFieldComponent
+              id="loginPage-textFieldEmail"
+              inputLabel="Last name"
+              type="lastName"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              helperText={fieldErrors.lastName}
+              fullWidth
+            />
+          </Box>
+          <Box>
+            <TextFieldComponent
               id="loginPage-textFieldPassword"
-              inputLabel="Password"
+              inputLabel="Password *"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -187,7 +216,7 @@ export const LogUpPage = () => {
           <Box sx={{ pt: fieldErrors.password ? "32px" : 0 }}>
             <TextFieldComponent
               id="loginPage-textFieldPassword"
-              inputLabel="Repeat the password"
+              inputLabel="Repeat the password *"
               type="password"
               value={secondPassword}
               onChange={(e) => setSecondPassword(e.target.value)}
@@ -225,11 +254,14 @@ export const LogUpPage = () => {
           >
             Do you already have an account?{" "}
             <Link
-              onClick={() => {}}
+              onClick={() => {
+                comebackToLoginPage();
+              }}
               sx={{
                 color: "var(--primary)",
                 textDecorationColor: "var(--primary)",
                 fontWeight: "bold",
+                cursor: "pointer",
               }}
             >
               Log-in
@@ -262,6 +294,8 @@ export const LogUpPage = () => {
           />
         </Box>
       )}
+            {loading && <SpinnerComponent />}
+      
     </Box>
   );
 };

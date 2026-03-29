@@ -10,7 +10,6 @@ export const passwordValidation = (password) => {
 };
 
 export const passwordsMatch = (password, secondPassword) => {
-  console.log('entra aquí: ', password, secondPassword)
   if (password === secondPassword) {
     return true;
   } else {

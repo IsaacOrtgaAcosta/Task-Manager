@@ -1,22 +1,69 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Box, Typography, Divider, Link } from "@mui/material";
-import { login } from "../../api/auth.api";
-import { emailValidation, passwordValidation } from "../../utils/validators";
+import {
+  emailValidation,
+  passwordValidation,
+  passwordsMatch,
+} from "../../utils/validators";
 import { TextFieldComponent } from "../../shared/components/TextFieldComponent";
 import { ButtonComponent } from "../../shared/components/ButtonComponent";
 import { AlertComponent } from "../../shared/components/AlertComponent";
-import { useAuth } from "../../providers/AuthProvider";
 import Logotype from "../../../assets/logotype.png";
 import "./LoginPage.css";
 
 export const LogUpPage = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSecondPassword, setShowSecondPassword] = useState(false);
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [secondPassword, setSecondPassword] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState({
+    name: "",
+    lastName: "",
     email: "",
     password: "",
+    passwordMatch: "",
   });
+  const [authError, setAuthError] = useState(false);
+
+  const validateUserData = () => {
+    if (emailValidation(email) === false) return;
+    if (passwordValidation(password) === false) return;
+    if (passwordsMatch(password, secondPassword) === false) {
+      setFieldErrors((prev) => {
+        return { ...prev, passwordMatch: "Passwords must match" };
+      });
+    }
+    sendLoginRequest(email, password);
+  };
+
+  const validateIfPasswordsMatch = () => {
+    if (passwordsMatch(password, secondPassword) === false) {
+      setFieldErrors((prev) => {
+        return { ...prev, passwordMatch: "Passwords must match" };
+      });
+    } else {
+      setFieldErrors((prev) => {
+        return { ...prev, passwordMatch: "" };
+      });
+    }
+  };
+  const onTogglePassword = () => {
+    setShowPassword((showPassword) => !showPassword);
+  };
+
+  const onToggleSecondPassword = () => {
+    setShowSecondPassword((showSecondPassword) => !showSecondPassword);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    validateUserData();
+  };
 
   const meetEmailTheRequirements = (email) => {
     const isOK = emailValidation(email);
@@ -82,10 +129,34 @@ export const LogUpPage = () => {
               color: "var(--secondary-text)",
             }}
           >
-            Please sign to your account.
+            Sign up to start managing your tasks
           </Typography>
         </Box>
         <Box sx={{ mt: 5 }} component="form" onSubmit={handleSubmit}>
+          <Box>
+            <TextFieldComponent
+              id="loginPage-textFieldEmail"
+              inputLabel="Name"
+              type="Name"
+              value={name}
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={(e) => meetEmailTheRequirements(e.target.value)}
+              helperText={fieldErrors.name}
+              fullWidth
+            />
+          </Box>
+          <Box>
+            <TextFieldComponent
+              id="loginPage-textFieldEmail"
+              inputLabel="Last name"
+              type="lastName"
+              value={lastName}
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={(e) => meetEmailTheRequirements(e.target.value)}
+              helperText={fieldErrors.lastName}
+              fullWidth
+            />
+          </Box>
           <Box>
             <TextFieldComponent
               id="loginPage-textFieldEmail"
@@ -95,9 +166,10 @@ export const LogUpPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               onBlur={(e) => meetEmailTheRequirements(e.target.value)}
               helperText={fieldErrors.email}
+              fullWidth
             />
           </Box>
-          <Box sx={{ mt: 4 }}>
+          <Box>
             <TextFieldComponent
               id="loginPage-textFieldPassword"
               inputLabel="Password"
@@ -109,6 +181,22 @@ export const LogUpPage = () => {
               showPassword={showPassword}
               onTogglePassword={onTogglePassword}
               helperText={fieldErrors.password}
+              fullWidth
+            />
+          </Box>
+          <Box sx={{ pt: fieldErrors.password ? "32px" : 0 }}>
+            <TextFieldComponent
+              id="loginPage-textFieldPassword"
+              inputLabel="Repeat the password"
+              type="password"
+              value={secondPassword}
+              onChange={(e) => setSecondPassword(e.target.value)}
+              onBlur={(e) => validateIfPasswordsMatch()}
+              endAdornment={true}
+              showPassword={showSecondPassword}
+              onTogglePassword={onToggleSecondPassword}
+              helperText={fieldErrors.passwordMatch}
+              fullWidth
             />
           </Box>
           <Box>
@@ -131,32 +219,22 @@ export const LogUpPage = () => {
         <Box sx={{ mt: 3, width: "100%" }}>
           <Divider />
         </Box>
-        <Box sx={{ mt: 5 }}>
-          <Box>
+        <Box sx={{ mt: 3, mb: 3 }}>
+          <Typography
+            sx={{ color: "var(--secondary-text)", textDecoration: "none" }}
+          >
+            Do you already have an account?{" "}
             <Link
-              href="#"
-              sx={{ color: "var(--secondary-text)", textDecoration: "none" }}
+              onClick={() => {}}
+              sx={{
+                color: "var(--primary)",
+                textDecorationColor: "var(--primary)",
+                fontWeight: "bold",
+              }}
             >
-              Forgot your password?
+              Log-in
             </Link>
-          </Box>
-          <Box sx={{ mt: 3 }}>
-            <Typography
-              sx={{ color: "var(--secondary-text)", textDecoration: "none" }}
-            >
-              Don't have an account?{" "}
-              <Link
-                onClick={navigateToLogUpPage}
-                sx={{
-                  color: "var(--primary)",
-                  textDecorationColor: "var(--primary)",
-                  fontWeight: "bold",
-                }}
-              >
-                Register
-              </Link>
-            </Typography>
-          </Box>
+          </Typography>
         </Box>
       </Box>
       {authError && (

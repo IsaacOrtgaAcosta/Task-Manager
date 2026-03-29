@@ -112,6 +112,7 @@ export const LogUpPage = () => {
       });
     }
   };
+  
 
   //Function that validates wether the password meets the requirements
   const meetPasswordTheRequirements = (password) => {

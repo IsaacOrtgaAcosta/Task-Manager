@@ -15,16 +15,24 @@ export const TextFieldComponent = ({
   showPassword = false,
   onTogglePassword,
   endAdornment = false,
-  error=false,
-  helperText="",
+  error = false,
+  helperText = "",
   ...rest
 }) => {
   const isPassword = type === "password";
-  if(helperText !== '') error = true;
+  if (helperText !== "") error = true;
 
   return (
-    <FormControl sx={{ m: 1, width: "100%" }} variant="outlined" error={error}>
-      <InputLabel htmlFor={id} error={error}>{inputLabel}</InputLabel>
+    <FormControl 
+          sx={{
+        width: "100%",
+        position: "relative",
+        mb: 2,
+      }} 
+    variant="outlined" error={error}>
+      <InputLabel htmlFor={id} error={error}>
+        {inputLabel}
+      </InputLabel>
       <OutlinedInput
         id={id}
         label={inputLabel}
@@ -36,7 +44,7 @@ export const TextFieldComponent = ({
               <IconButton
                 onClick={onTogglePassword}
                 aria-label={
-                  showPassword ? 'hide the password' : 'display the password'
+                  showPassword ? "hide the password" : "display the password"
                 }
                 edge="end"
               >
@@ -46,7 +54,23 @@ export const TextFieldComponent = ({
           ) : undefined
         }
       />
-      {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
+      {helperText ? (
+        <FormHelperText
+          sx={{
+            position: "absolute",
+            top: "100%",
+            left: 0,
+            right: 0,
+            margin: 0,
+            marginTop: "4px",
+            whiteSpace: "normal",
+            wordBreak: "break-word",
+            lineHeight: 1.2,
+          }}
+        >
+          {helperText}
+        </FormHelperText>
+      ) : null}
     </FormControl>
   );
 };

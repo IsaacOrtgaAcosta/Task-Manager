@@ -1,38 +1,64 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Box, Typography, Divider, Link } from "@mui/material";
-import { emailValidation, passwordValidation } from "../../utils/validators";
+import {
+  emailValidation,
+  passwordValidation,
+  passwordsMatch,
+} from "../../utils/validators";
 import { TextFieldComponent } from "../../shared/components/TextFieldComponent";
 import { ButtonComponent } from "../../shared/components/ButtonComponent";
 import { AlertComponent } from "../../shared/components/AlertComponent";
-import { useAuth } from "../../providers/AuthProvider";
-import PersonIcon from "@mui/icons-material/Person";
 import Logotype from "../../../assets/logotype.png";
 import "./LoginPage.css";
 
 export const LogUpPage = () => {
-  const [showPassword, setShowPassowrd] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSecondPassword, setShowSecondPassword] = useState(false);
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secondPassword, setSecondPassword] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState({
     name: "",
     lastName: "",
     email: "",
     password: "",
+    passwordMatch: "",
   });
   const [authError, setAuthError] = useState(false);
 
   const validateUserData = () => {
     if (emailValidation(email) === false) return;
     if (passwordValidation(password) === false) return;
+    if (passwordsMatch(password, secondPassword) === false) {
+      setFieldErrors((prev) => {
+        return { ...prev, passwordMatch: "Passwords must match" };
+      });
+    }
     sendLoginRequest(email, password);
   };
 
-  const onTogglePassword = () =>
-    setShowPassowrd((showPassword) => !showPassword);
+  const validateIfPasswordsMatch = () => {
+    if (passwordsMatch(password, secondPassword) === false) {
+      setFieldErrors((prev) => {
+        return { ...prev, passwordMatch: "Passwords must match" };
+      });
+    } else {
+      setFieldErrors((prev) => {
+        return { ...prev, passwordMatch: "" };
+      });
+    }
+  };
+  const onTogglePassword = () => {
+    setShowPassword((showPassword) => !showPassword);
+  };
+
+  const onToggleSecondPassword = () => {
+    setShowSecondPassword((showSecondPassword) => !showSecondPassword);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -116,6 +142,7 @@ export const LogUpPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               onBlur={(e) => meetEmailTheRequirements(e.target.value)}
               helperText={fieldErrors.name}
+              fullWidth
             />
           </Box>
           <Box>
@@ -127,6 +154,7 @@ export const LogUpPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               onBlur={(e) => meetEmailTheRequirements(e.target.value)}
               helperText={fieldErrors.lastName}
+              fullWidth
             />
           </Box>
           <Box>
@@ -138,9 +166,10 @@ export const LogUpPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               onBlur={(e) => meetEmailTheRequirements(e.target.value)}
               helperText={fieldErrors.email}
+              fullWidth
             />
           </Box>
-          <Box sx={{ mt: 4 }}>
+          <Box>
             <TextFieldComponent
               id="loginPage-textFieldPassword"
               inputLabel="Password"
@@ -152,19 +181,22 @@ export const LogUpPage = () => {
               showPassword={showPassword}
               onTogglePassword={onTogglePassword}
               helperText={fieldErrors.password}
+              fullWidth
             />
           </Box>
-          <Box sx={{ mt: 4 }}>
+          <Box sx={{ pt: fieldErrors.password ? "32px" : 0 }}>
             <TextFieldComponent
               id="loginPage-textFieldPassword"
               inputLabel="Repeat the password"
               type="password"
               value={secondPassword}
-              onChange={(e) => setPassword(e.target.value)}
-              onBlur={(e) => meetPasswordTheRequirements(e.target.value)}
+              onChange={(e) => setSecondPassword(e.target.value)}
+              onBlur={(e) => validateIfPasswordsMatch()}
               endAdornment={true}
-              showPassword={showPassword}
-              onTogglePassword={onTogglePassword}
+              showPassword={showSecondPassword}
+              onTogglePassword={onToggleSecondPassword}
+              helperText={fieldErrors.passwordMatch}
+              fullWidth
             />
           </Box>
           <Box>

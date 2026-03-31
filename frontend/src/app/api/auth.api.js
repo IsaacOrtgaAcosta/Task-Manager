@@ -7,8 +7,8 @@ export async function login({ email, password }) {
   });
 }
 
-export async function logup({ email, name, lastName, password }) {
-  return http("/auth/logup", {
+export async function signup({ email, name, lastName, password }) {
+  return http("/auth/signup", {
     method: "POST",
     body: { email, name, lastName, password },
   });

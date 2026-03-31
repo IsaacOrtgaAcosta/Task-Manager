@@ -86,9 +86,9 @@ export const LoginPage = () => {
     }
   };
 
-  const navigateToLogUpPage = () => {
+  const navigateToSignUpPage = () => {
     console.log('LE DI AL REGISTRO')
-    navigate("/log-up");
+    navigate("/sign-up");
   };
 
   return (
@@ -179,7 +179,7 @@ export const LoginPage = () => {
             >
               Don't have an account?{" "}
               <Link
-                onClick={navigateToLogUpPage}
+                onClick={navigateToSignUpPage}
                 sx={{
                   color: "var(--primary)",
                   textDecorationColor: "var(--primary)",

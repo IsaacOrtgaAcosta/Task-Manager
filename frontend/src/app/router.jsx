@@ -2,11 +2,11 @@ import { createBrowserRouter } from "react-router-dom";
 import { LoginPage } from "./features/auth/LoginPage";
 import { TasksPage } from "./features/tasks/TasksPage";
 import { AppLayout } from "./layout/AppLayout";
-import { LogUpPage } from "./features/auth/LogUpPage";
+import { SignUpPage } from "./features/auth/SignUpPage";
 
 export const router = createBrowserRouter([
   { path: "/", element: <LoginPage /> },
-  { path: "/log-up", element: <LogUpPage /> },
+  { path: "/sign-up", element: <SignUpPage /> },
   {
     element: <AppLayout />,
     children: [{ path: "/tasks", element: <TasksPage /> }],

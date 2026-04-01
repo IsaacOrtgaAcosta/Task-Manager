@@ -14,7 +14,6 @@ export const TasksPage = () => {
     try {
       const result = await getTasksList();
       setTasksList(result.tasks);
-      console.log("Task: ", taskList);
     } catch (error) {
       console.error("Error fetching tasks: ", error);
     }

@@ -11,12 +11,8 @@ export const CardComponent = ({ img = "", icon = "", cardTitle, cardText }) => {
       {icon}
 
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
           {cardTitle}
-        </Typography>
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {cardText}
-        </Typography>
       </CardContent>
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>
         <ButtonComponent

@@ -86,6 +86,12 @@ async function updateTaskById(userId, taskId, updates){
       [userId, taskId]
     );
     return;
+  }else if(updates.typeOfField === 'noComplete') {
+    await db.query(
+      `UPDATE tasks SET completed_at = NULL WHERE user_id = ? AND id = ?`,
+      [userId, taskId]
+    );
+    return;
   }
 
   await db.query(

@@ -3,7 +3,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Box, Typography, Divider, boxClasses } from "@mui/material";
 import { EditableTaskField } from "./EditableTaskField";
 
-export const TaskInformation = ({ taskSelected, setOpenModal }) => {
+export const TaskInformation = ({ taskSelected, setOpenModal, fetchTasks }) => {
   const [editTitle, setEditTitle] = useState(false);
   const [editDescription, setEditDescription] = useState(false);
   const [taskData, setTaskData] = useState(taskSelected);
@@ -24,6 +24,7 @@ export const TaskInformation = ({ taskSelected, setOpenModal }) => {
               setOpenModal={setOpenModal}
               setEditTitle={setEditTitle}
               setTaskData={setTaskData}
+              fetchTasks={fetchTasks}
             />
           </Box>
         ) : (
@@ -65,6 +66,7 @@ export const TaskInformation = ({ taskSelected, setOpenModal }) => {
               setOpenModal={setOpenModal}
               setEditDescription={setEditDescription}
               setTaskData={setTaskData}
+              fetchTasks={fetchTasks}
             />
           </Box>
         ) : (

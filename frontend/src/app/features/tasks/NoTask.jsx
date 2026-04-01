@@ -1,10 +1,11 @@
 import { Typography } from "@mui/material";
 import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
 import { CardComponent } from "../../shared/components/CardComponent";
+import { useTasksUI } from "../../providers/NewTaskProvider";
 
 export const NoTask = () => {
   const buttonProperties = {};
-
+  const {openModal} = useTasksUI();
   return (
     <>
       <CardComponent
@@ -13,6 +14,7 @@ export const NoTask = () => {
         }
         cardTitle={<Typography variant={"h4"}>No tasks yet</Typography>}
         cardText={<Typography>Start managing tasks by creating a</Typography>}
+        action={openModal}
       />
     </>
   );

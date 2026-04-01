@@ -1,8 +1,8 @@
 import { Button } from "@mui/material"
-export const ButtonComponent = ({buttonTitle, type, color, ...rest}) => {
+export const ButtonComponent = ({buttonTitle, type="button", ...rest}) => {
   return (
     <>
-    <Button type={type} variant="contained" {...rest} color={color}>{buttonTitle}</Button>
+    <Button type={type} variant="contained" {...rest} >{buttonTitle}</Button>
     </>
   )
 }

@@ -14,7 +14,7 @@ export const TasksPage = () => {
     try {
       const result = await getTasksList();
       setTasksList(result.tasks);
-      console.log('Task: ', taskList)
+      console.log("Task: ", taskList);
     } catch (error) {
       console.error("Error fetching tasks: ", error);
     }
@@ -36,14 +36,14 @@ export const TasksPage = () => {
         />
       </Box>
     );
-  }
-
-  if(tasksList.length <= 0){
+  } else {
     return (
-      <
-      >
-      <NoTask />
-      </>
-    )
+      <Box sx={{ bgColor: "background.paper", width: "100%", pt: 3 }}>
+        <TasksHeader />
+        <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+          <NoTask />
+        </Box>
+      </Box>
+    );
   }
 };

@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { ButtonComponent } from "../../shared/components/ButtonComponent";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 
 export const TasksHeader = () => {
   const buttonTitle = <AddIcon />;
@@ -23,8 +23,13 @@ export const TasksHeader = () => {
       <Box sx={{ flex: 1, display: "flex", justifyContent: "end" }}>
         <ButtonComponent
           buttonTitle={buttonTitle}
-          color={"var(--primary)"}
-          sx={{ backgroundColor: "var(--background-color)", width: "30%" }}
+          sx={{
+            backgroundColor: "var(--primary)",
+            color: "white",
+            width: "30%",
+            transition: "0.3s ease-in",
+            "&:hover": { backgroundColor: "var(--secondary)" },
+          }}
         />
       </Box>
     </Box>

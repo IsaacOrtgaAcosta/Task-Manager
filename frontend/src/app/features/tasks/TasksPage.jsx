@@ -5,6 +5,7 @@ import { TasksItem } from "./TasksItem";
 import { TaskSearcher } from "./TaskSearcher";
 import { getTasksList } from "../../api/tasks.api";
 import "./TasksPage.css";
+import { NoTask } from "./NoTask";
 
 export const TasksPage = () => {
   const [tasksList, setTasksList] = useState([]);
@@ -13,6 +14,7 @@ export const TasksPage = () => {
     try {
       const result = await getTasksList();
       setTasksList(result.tasks);
+      console.log("Task: ", taskList);
     } catch (error) {
       console.error("Error fetching tasks: ", error);
     }
@@ -32,6 +34,15 @@ export const TasksPage = () => {
           setTasksList={setTasksList}
           fetchTasks={fetchTasks}
         />
+      </Box>
+    );
+  } else {
+    return (
+      <Box sx={{ bgColor: "background.paper", width: "100%", pt: 3 }}>
+        <TasksHeader />
+        <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+          <NoTask />
+        </Box>
       </Box>
     );
   }

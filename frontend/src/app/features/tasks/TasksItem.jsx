@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import {
   Box,
   ListItem,
@@ -8,8 +8,6 @@ import {
   ListItemIcon,
   Divider,
   Button,
-  Menu,
-  MenuItem,
   Grid,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -70,7 +68,6 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
 
   const getTaskData = async () => {
     const result = await getTaskById(activeTaskId);
-    console.log(result);
     const taskCompleted =
       result.task.completed_at !== null
         ? `This task was completed at ${formatDate(result.task.completed_at)}`

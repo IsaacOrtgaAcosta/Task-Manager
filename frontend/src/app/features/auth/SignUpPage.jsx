@@ -10,11 +10,12 @@ import { TextFieldComponent } from "../../shared/components/TextFieldComponent";
 import { ButtonComponent } from "../../shared/components/ButtonComponent";
 import { AlertComponent } from "../../shared/components/AlertComponent";
 import { SpinnerComponent } from "../../shared/components/SpinnerComponent";
+import { useAuth } from "../../providers/AuthProvider";
 import Logotype from "../../../assets/logotype.png";
 import "./LoginPage.css";
-import { logup } from "../../api/auth.api";
+import { signup } from "../../api/auth.api";
 
-export const LogUpPage = () => {
+export const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showSecondPassword, setShowSecondPassword] = useState(false);
@@ -52,16 +53,19 @@ export const LogUpPage = () => {
       password !== "" &&
       secondPassword !== ""
     ) {
-      sendLogupRequest(email, name, lastName, password);
+      sendSignUpRequest(email, name, lastName, password);
     }else{
       setLoading(false);
     }
   };
 
-  const sendLogupRequest = async (email, name, lastName, password) => {
+  const { login: saveSession } = useAuth();
+  const sendSignUpRequest = async (email, name, lastName, password) => {
     setLoading(true);
     try {
-      await logup({email, name, lastName, password})
+      const data = await signup({email, name, lastName, password});
+      return;
+      saveSession(data);
     } catch (error) {
       console.error('Error with the registration', error);
       setAuthError(true);
@@ -112,7 +116,7 @@ export const LogUpPage = () => {
       });
     }
   };
-  
+
 
   //Function that validates wether the password meets the requirements
   const meetPasswordTheRequirements = (password) => {
@@ -231,7 +235,7 @@ export const LogUpPage = () => {
           <Box>
             <ButtonComponent
               type="submit"
-              buttonTitle="Sign In"
+              buttonTitle="Send"
               size={"large"}
               sx={{
                 width: "100%",

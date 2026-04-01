@@ -42,7 +42,7 @@ async function login(email, password) {
   };
 }
 
-async function logup(email, name, lastName, password) {
+async function signup(email, name, lastName, password) {
   if (!email || !name || !password) {
     throw new HttpError(400, "Email, name and password are required");
   }
@@ -52,7 +52,9 @@ async function logup(email, name, lastName, password) {
     fullName = name + " " + lastName;
   }
 
-  const [rows] = await db.query("SELECT id FROM users WHERE email = ?", [email]);
+  const [rows] = await db.query("SELECT id FROM users WHERE email = ?", [
+    email,
+  ]);
 
   const match = rows[0];
   if (match) {
@@ -65,24 +67,25 @@ async function logup(email, name, lastName, password) {
 
   const passwordHashed = await bcrypt.hash(password, 10);
 
-
   const [result] = await db.query(
     "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
     [fullName, email, passwordHashed],
   );
 
-  if(result.affectedRows === 1){
+  if (result.affectedRows === 1) {
     const userId = result.insertId;
-
-    return res.status(201).json({
-        message: "User created succesfully",
-        userId,
+    const token = jwt.sign({ sub: userId }, env.JWT_SECRET, {
+      expiresIn: "24h",
     });
-  }else{
+    return res.status(201).json({
+      message: "User created succesfully",
+      token,
+    });
+  } else {
     return res.status(500).json({
-        message: "User could not be created",
+      message: "User could not be created",
     });
   }
 }
 
-module.exports = { login, logup };
+module.exports = { login, signup };

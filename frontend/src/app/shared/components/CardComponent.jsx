@@ -5,7 +5,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { ButtonComponent } from "./ButtonComponent";
 
-export const CardComponent = ({ img = "", icon = "", cardTitle, cardText }) => {
+export const CardComponent = ({ img = "", icon = "", cardTitle, cardText, action}) => {
   return (
     <Card sx={{ width: "100%", height: "100%", p: 4 }}>
       {icon}
@@ -18,6 +18,7 @@ export const CardComponent = ({ img = "", icon = "", cardTitle, cardText }) => {
         <ButtonComponent
           buttonTitle={"Create a task"}
           type={"button"}
+          onClick={action}
           sx={{
             backgroundColor: "var(--primary)",
             color: "white",

@@ -6,9 +6,12 @@ import { TaskSearcher } from "./TaskSearcher";
 import { getTasksList } from "../../api/tasks.api";
 import "./TasksPage.css";
 import { NoTask } from "./NoTask";
+import { ModalComponent } from "../../shared/components/ModalComponent";
+import { useTasksUI } from "../../providers/NewTaskProvider";
 
 export const TasksPage = () => {
   const [tasksList, setTasksList] = useState([]);
+  const { openNewTaskModal, closeModal } = useTasksUI();
   // Send request to get Tasks:
   const fetchTasks = useCallback(async () => {
     try {
@@ -23,6 +26,7 @@ export const TasksPage = () => {
     fetchTasks();
   }, [fetchTasks]);
 
+  console.log(openNewTaskModal);
   if (tasksList.length > 0) {
     return (
       <Box sx={{ bgColor: "background.paper", width: "100%", pt: 3 }}>
@@ -37,12 +41,21 @@ export const TasksPage = () => {
     );
   } else {
     return (
-      <Box sx={{ bgColor: "background.paper", width: "100%", pt: 3 }}>
-        <TasksHeader />
-        <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-          <NoTask />
+      <>
+        <Box sx={{ bgColor: "background.paper", width: "100%", pt: 3 }}>
+          <TasksHeader />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <NoTask />
+          </Box>
         </Box>
-      </Box>
+        <ModalComponent open={openNewTaskModal} onClose={closeModal}/>
+      </>
     );
   }
 };

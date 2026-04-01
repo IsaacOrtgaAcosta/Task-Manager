@@ -1,9 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { ButtonComponent } from "../../shared/components/ButtonComponent";
 import AddIcon from "@mui/icons-material/Add";
+import { useTasksUI } from "../../providers/NewTaskProvider";
 
 export const TasksHeader = () => {
   const buttonTitle = <AddIcon />;
+  const {openModal} = useTasksUI();
   return (
     <Box
       sx={{
@@ -23,6 +25,7 @@ export const TasksHeader = () => {
       <Box sx={{ flex: 1, display: "flex", justifyContent: "end" }}>
         <ButtonComponent
           buttonTitle={buttonTitle}
+          onClick={() => openModal()}
           sx={{
             backgroundColor: "var(--primary)",
             color: "white",

@@ -8,6 +8,7 @@ import "./TasksPage.css";
 import { NoTask } from "./NoTask";
 import { ModalComponent } from "../../shared/components/ModalComponent";
 import { useTasksUI } from "../../providers/NewTaskProvider";
+import { NewTask } from "./NewTask";
 
 export const TasksPage = () => {
   const [tasksList, setTasksList] = useState([]);
@@ -26,7 +27,6 @@ export const TasksPage = () => {
     fetchTasks();
   }, [fetchTasks]);
 
-  console.log(openNewTaskModal);
   if (tasksList.length > 0) {
     return (
       <Box sx={{ bgColor: "background.paper", width: "100%", pt: 3 }}>
@@ -54,7 +54,9 @@ export const TasksPage = () => {
             <NoTask />
           </Box>
         </Box>
-        <ModalComponent open={openNewTaskModal} onClose={closeModal}/>
+        <Box>
+          <NewTask open={openNewTaskModal} onClose={closeModal} />
+        </Box>
       </>
     );
   }

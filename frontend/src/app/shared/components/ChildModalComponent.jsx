@@ -19,9 +19,11 @@ export const ChildModalComponent = ({
   setOpenChildModal,
   childModalProps,
 }) => {
-  const title = childModalProps. title;
-  const text = childModalProps.text;
-  const actions = childModalProps.actions;
+  
+  const title = childModalProps?.title;
+  const text = childModalProps?.text;
+  const actions = childModalProps?.actions;
+
   return (
     <>
       <Modal

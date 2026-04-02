@@ -25,11 +25,20 @@ export async function deleteTask(taskId) {
 }
 
 export async function updateTask(taskId, updates) {
-  console.log('updates: ', updates);
   return http(`/tasks/${taskId}`, {
     method: "PATCH",
     contentType: "application/json",
     auth: true,
     body: updates,
+  });
+}
+
+export async function saveNewTask(newTask) {
+  console.log(newTask);
+  return http("/tasks/", {
+    method: "POST",
+    contentType: "application/json",
+    auth: true,
+    body: newTask,
   });
 }

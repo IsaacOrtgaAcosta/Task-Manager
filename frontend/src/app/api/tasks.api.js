@@ -1,9 +1,8 @@
 import { http } from "./http";
 
-export async function getTasksList() {
-  return http("/tasks/", {
+export async function getTasksList({ page, limit }) {
+  return http(`/tasks?page=${page}&limit=${limit}`, {
     method: "GET",
-    contentType: "application/json",
     auth: true,
   });
 }

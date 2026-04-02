@@ -2,17 +2,30 @@ const { env } = require("../../utils/env");
 const HttpError = require("../../utils/httpError");
 const db = require("../../db/migrations/client");
 
-async function getTasksByUser(userId) {
+async function getTasksByUser(userId, page, limit) {
   if (!userId) {
     throw new HttpError(400, "User id is required");
   }
 
+  const offset = (page - 1) * limit;
+
   const [rows] = await db.query(
-    "SELECT id, title, description, completed_at, created_at, updated_at, priority FROM tasks WHERE user_id = ? ORDER BY created_at DESC",
-    [userId],
+     `SELECT * FROM tasks 
+       WHERE user_id = ?
+       ORDER BY created_at DESC
+       LIMIT ? OFFSET ?`,
+      [userId, limit, offset]
   );
 
-  return { tasks: rows };
+    const [[{ total }]] = await db.query(
+      `SELECT COUNT(*) as total FROM tasks WHERE user_id = ?`,
+      [userId]
+    );
+
+  return {
+    tasks: rows,
+    total,
+  };
 }
 
 async function getTaskByTaskId(taskId, userId) {

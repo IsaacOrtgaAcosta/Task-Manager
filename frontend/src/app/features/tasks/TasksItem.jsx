@@ -131,7 +131,7 @@ export const TasksItem = ({ tasksList, setTasksList, fetchTasks }) => {
       await deleteTask(taskId);
       handleCloseChildModal();
       handleCloseModal();
-      setTasksList((prev) => prev.filter((t) => t.id !== taskId));
+      fetchTasks();
     } catch (error) {
       console.error("Error deleting the task", error);
     } finally {
@@ -183,7 +183,7 @@ export const TasksItem = ({ tasksList, setTasksList, fetchTasks }) => {
         typeOfField,
         newValue,
       });
-      setTasksList((prev) => prev.filter((t) => t.id !== taskId));
+      fetchTasks();
     } catch (error) {
       console.error("Error updating the task", error);
     } finally {
@@ -203,7 +203,7 @@ export const TasksItem = ({ tasksList, setTasksList, fetchTasks }) => {
         typeOfField,
         newValue,
       });
-      setTasksList((prev) => prev.filter((t) => t.id !== taskId));
+      fetchTasks();
     } catch (error) {
       console.error("Error updating the task", error);
     } finally {

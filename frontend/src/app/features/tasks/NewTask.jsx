@@ -17,7 +17,7 @@ import { saveNewTask } from "../../api/tasks.api";
 import { ChildModalComponent } from "../../shared/components/ChildModalComponent";
 import { useNavigate } from "react-router";
 
-export const NewTask = ({ open, onClose, fetchTasks }) => {
+export const NewTask = ({ open, onClose, fetchTasks, setPage }) => {
   const [loading, setLoading] = useState(false);
   const [openChildModal, setOpenChildModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
@@ -44,6 +44,7 @@ export const NewTask = ({ open, onClose, fetchTasks }) => {
       setTimeout(() => {
         setOpenChildModal(false);
         fetchTasks();
+        setPage(1);
       }, 3000);
       setNewTask({
         title: "",

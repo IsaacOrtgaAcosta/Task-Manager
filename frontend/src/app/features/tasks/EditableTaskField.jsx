@@ -12,6 +12,7 @@ export const EditableTaskField = ({
   setEditTitle,
   setEditDescription,
   setTaskData,
+  fetchTasks
 }) => {
   const [loading, setLoading] = useState(false);
   const [newValue, setNewValue] = useState(value);
@@ -37,6 +38,7 @@ export const EditableTaskField = ({
     } finally {
       if (typeOfField === "title") setEditTitle(false);
       if (typeOfField === "description") setEditDescription(false);
+      fetchTasks();
       setLoading(false);
     }
   };

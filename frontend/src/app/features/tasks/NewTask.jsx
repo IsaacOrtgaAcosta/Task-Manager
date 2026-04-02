@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { ModalComponent } from "../../shared/components/ModalComponent";
 import { TextFieldComponent } from "../../shared/components/TextFieldComponent";
-import { Box, Typography, Divider, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Divider,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+} from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ButtonComponent } from "../../shared/components/ButtonComponent";
@@ -9,6 +16,12 @@ import { ButtonComponent } from "../../shared/components/ButtonComponent";
 export const NewTask = ({ open, onClose }) => {
   const [startDate, setStartDate] = useState();
   const [dueDate, setDueDate] = useState();
+  const [newTask, setNewTask] = useState({
+    title: "",
+    description: "",
+    startDate: null,
+    dueDate: null,
+  });
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -23,18 +36,37 @@ export const NewTask = ({ open, onClose }) => {
               <Divider></Divider>
               <Box>
                 <Box>
-                  <TextFieldComponent inputLabel="Title"></TextFieldComponent>
+                  <TextFieldComponent value={newTask.title} 
+                  onChange={(e) => {
+                      setNewTask((prev) => ({
+                        ...prev,
+                        title: e.target.value,
+                      }));
+                    }}
+                  inputLabel="Title"></TextFieldComponent>
                 </Box>
                 <Box>
-                  <TextFieldComponent inputLabel="Description"></TextFieldComponent>
+                  <TextFieldComponent
+                    value={newTask.description}
+                    onChange={(e) => {
+                      setNewTask((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }));
+                    }}
+                    inputLabel="Description"
+                  ></TextFieldComponent>
                 </Box>
                 <Box sx={{ mb: 2 }}>
                   <DatePicker
                     sx={{ width: "100%" }}
                     label="Start day"
-                    value={startDate}
-                    onChange={(newStartDateValue) =>
-                      setStartDate(newStartDateValue)
+                    value={newTask.startDate}
+                    onChange={(newValue) =>
+                      setNewTask((prev) => ({
+                        ...prev,
+                        startDate: newValue,
+                      }))
                     }
                   />
                 </Box>
@@ -42,17 +74,39 @@ export const NewTask = ({ open, onClose }) => {
                   <DatePicker
                     sx={{ width: "100%" }}
                     label="Due day"
-                    value={dueDate}
-                    onChange={(newDueDateValue) => setDueDate(newDueDateValue)}
+                    value={newTask.dueDate}
+                    onChange={(newValue) =>
+                      setNewTask((prev) => ({
+                        ...prev,
+                        dueDate: newValue,
+                      }))
+                    }
                   />
                 </Box>
               </Box>
               <Box>
-                <Typography variant='p' sx={{display: 'flex', justifySelf: 'center',pt: 2, pb: 2, fontSize: '18px'}}>Priority</Typography>
-                <FormGroup sx={{display: 'flex', flexDirection: 'row', justifySelf: 'center'}}>
-                    <FormControlLabel control={<Checkbox />} label="Low"/>
-                    <FormControlLabel control={<Checkbox />} label="Medium"/>
-                    <FormControlLabel control={<Checkbox />} label="High"/>
+                <Typography
+                  variant="p"
+                  sx={{
+                    display: "flex",
+                    justifySelf: "center",
+                    pt: 2,
+                    pb: 2,
+                    fontSize: "18px",
+                  }}
+                >
+                  Priority
+                </Typography>
+                <FormGroup
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifySelf: "center",
+                  }}
+                >
+                  <FormControlLabel control={<Checkbox />} label="Low" />
+                  <FormControlLabel control={<Checkbox />} label="Medium" />
+                  <FormControlLabel control={<Checkbox />} label="High" />
                 </FormGroup>
               </Box>
             </>

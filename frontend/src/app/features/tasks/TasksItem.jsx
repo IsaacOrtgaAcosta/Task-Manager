@@ -21,7 +21,7 @@ import { ChildModalComponent } from "../../shared/components/ChildModalComponent
 import { SpinnerComponent } from "../../shared/components/SpinnerComponent";
 import { TaskActionsMenu } from "./TaskActionsMenu";
 
-export const TasksItem = ({ tasksList, setTasksList }) => {
+export const TasksItem = ({ tasksList, setTasksList, fetchTasks }) => {
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -156,6 +156,44 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
     setOpenChildModal(true);
   };
 
+  const askAfterNoComplete = (activeTaskId) => {
+    setChildModalProps({
+      title: "Confirm before mark the task as no completed",
+      text: "Are you sure you want to change the state of the task?",
+      actions: (
+        <Button
+          onClick={() => {
+            noCompleteTaskAfterAsk(activeTaskId);
+          }}
+        >
+          Confirm
+        </Button>
+      ),
+    });
+    setOpenChildModal(true);
+  };
+
+  const noCompleteTaskAfterAsk = async (taskId) => {
+    console.log('TASKID: ', taskId);
+    setLoading(true);
+    const typeOfField = "noComplete";
+    const newValue = "noCompleted";
+    try {
+      await updateTask(taskId, {
+        typeOfField,
+        newValue,
+      });
+      setTasksList((prev) => prev.filter((t) => t.id !== taskId));
+    } catch (error) {
+      console.error("Error updating the task", error);
+    } finally {
+      setOpenChildModal(false);
+      setOpenModal(false);
+      fetchTasks();
+      setLoading(false);
+    }
+  };
+
   const completeTaskAfterAsk = async (taskId) => {
     setLoading(true);
     const typeOfField = "complete";
@@ -171,6 +209,7 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
     } finally {
       setOpenChildModal(false);
       setOpenModal(false);
+      fetchTasks();
       setLoading(false);
     }
   };
@@ -198,6 +237,8 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
       color: "var(--error)",
     },
   ];
+
+  const activeTask = tasksList.find((task) => task.id === activeTaskId);
 
   return (
     <>
@@ -284,7 +325,49 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
           anchorEl={anchorEl}
           open={open}
           onClose={handleCloseMenu}
-          items={menuTaskItems}
+          items={
+            activeTask?.completed_at === null
+              ? [
+                  {
+                    id: "show",
+                    label: "Show",
+                    onClick: () => handleOpenModal(),
+                    color: "var(--secondary-text",
+                  },
+                  {
+                    id: "complete",
+                    label: "Complete",
+                    onClick: () => askAfterComplete(activeTaskId),
+                    color: "var(--secondary-text)",
+                  },
+                  {
+                    id: "delete",
+                    label: "Delete",
+                    onClick: askAfterDelete,
+                    color: "var(--error)",
+                  },
+                ]
+              : [
+                  {
+                    id: "show",
+                    label: "Show",
+                    onClick: () => handleOpenModal(),
+                    color: "var(--secondary-text",
+                  },
+                  {
+                    id: "noComplete",
+                    label: "No complete",
+                    onClick: () => askAfterNoComplete(activeTaskId),
+                    color: "var(--secondary-text)",
+                  },
+                  {
+                    id: "delete",
+                    label: "Delete",
+                    onClick: askAfterDelete,
+                    color: "var(--error)",
+                  },
+                ]
+          }
           menuListAriaLabelledby={"basic-button"}
         />
       </List>
@@ -351,6 +434,7 @@ export const TasksItem = ({ tasksList, setTasksList }) => {
             <TaskInformation
               taskSelected={taskSelected}
               setOpenModal={setOpenModal}
+              fetchTasks={fetchTasks}
             />
           </>
         </ModalComponent>

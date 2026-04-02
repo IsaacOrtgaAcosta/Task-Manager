@@ -43,15 +43,20 @@ export const TasksPage = () => {
 
   if (tasksList.length > 0) {
     return (
-      <Box sx={{ bgColor: "background.paper", width: "100%", pt: 3 }}>
-        <TasksHeader />
-        <TaskSearcher />
-        <TasksItem
-          tasksList={tasksList}
-          setTasksList={setTasksList}
-          fetchTasks={fetchTasks}
-        />
-      </Box>
+      <>
+        <Box sx={{ bgColor: "background.paper", width: "100%", pt: 3 }}>
+          <TasksHeader />
+          <TaskSearcher />
+          <TasksItem
+            tasksList={tasksList}
+            setTasksList={setTasksList}
+            fetchTasks={fetchTasks}
+          />
+        </Box>
+        <Box>
+          <NewTask open={openNewTaskModal} onClose={closeModal} fetchTasks={fetchTasks}/>
+        </Box>
+      </>
     );
   } else {
     return (
@@ -69,7 +74,7 @@ export const TasksPage = () => {
           </Box>
         </Box>
         <Box>
-          <NewTask open={openNewTaskModal} onClose={closeModal} />
+          <NewTask open={openNewTaskModal} onClose={closeModal} fetchTasks={fetchTasks}/>
         </Box>
       </>
     );

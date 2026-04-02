@@ -26,7 +26,7 @@ async function getTaskByTaskId(taskId, userId) {
 
   const id = Number(taskId);
 
-  if (!Number.isInteger(id) || id <=0){
+  if (!Number.isInteger(id) || id <= 0) {
     throw new HttpError(400, "Invalid task id");
   }
 
@@ -35,7 +35,7 @@ async function getTaskByTaskId(taskId, userId) {
     [taskId, userId],
   );
 
-  if(rows.length === 0){
+  if (rows.length === 0) {
     throw new HttpError(404, "Task not found");
   }
 
@@ -70,35 +70,79 @@ async function deleteTaskById(tasksId, userId) {
   return { deletedCount };
 }
 
-async function updateTaskById(userId, taskId, updates){
-  if(!userId){
+async function updateTaskById(userId, taskId, updates) {
+  if (!userId) {
     throw new HttpError(400, "User_id is required");
   }
 
-  let setValue = '';
-  if(updates.typeOfField === "description"){
+  let setValue = "";
+  if (updates.typeOfField === "description") {
     setValue = "description";
-  }else if(updates.typeOfField === 'title'){
-    setValue = "title"; 
-  }else if(updates.typeOfField === 'complete'){
-     await db.query(
+  } else if (updates.typeOfField === "title") {
+    setValue = "title";
+  } else if (updates.typeOfField === "complete") {
+    await db.query(
       `UPDATE tasks SET completed_at = NOW() WHERE user_id = ? AND id = ?`,
-      [userId, taskId]
+      [userId, taskId],
     );
     return;
-  }else if(updates.typeOfField === 'noComplete') {
+  } else if (updates.typeOfField === "noComplete") {
     await db.query(
       `UPDATE tasks SET completed_at = NULL WHERE user_id = ? AND id = ?`,
-      [userId, taskId]
+      [userId, taskId],
     );
     return;
   }
 
   await db.query(
     `UPDATE tasks SET ${setValue} = ? WHERE user_id = ? AND id = ?`,
-    [updates.newValue, userId, taskId]
-  )
-
+    [updates.newValue, userId, taskId],
+  );
 }
 
-module.exports = { getTasksByUser, getTaskByTaskId, deleteTaskById, updateTaskById };
+async function saveNewTask(
+  title,
+  description,
+  startDate,
+  dueDate,
+  priority,
+  userId,
+) {
+  if (!userId) {
+    throw new HttpError(400, "User_id is required");
+  }
+
+  if (!title) {
+    throw new HttpError(400, "Title is required");
+  }
+
+  if (!description) {
+    throw new HttpError(400, "Description is required");
+  }
+
+  if (!priority) {
+    throw new HttpError(400, "Priority is required");
+  }
+
+  const [result] = await db.query(
+    `INSERT INTO tasks (user_id, title, description, start_date, due_date, created_at, priority) VALUES(?, ?, ?, ?, ?, NOW(), ?)`,
+    [userId, title, description, startDate, dueDate, priority],
+  );
+
+  return {
+  id: result.insertId,
+  title,
+  description,
+  startDate,
+  dueDate,
+  priority
+};
+}
+
+module.exports = {
+  getTasksByUser,
+  getTaskByTaskId,
+  deleteTaskById,
+  updateTaskById,
+  saveNewTask,
+};

@@ -7,7 +7,7 @@ export const PaginationComponent = ({page, count, onChange}) => {
         page={page}
         count={count}
         onChange={onChange}
-        color='#E63346'
+        color='error'
         />
 
     </Box>

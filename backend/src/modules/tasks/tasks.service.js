@@ -8,7 +8,7 @@ async function getTasksByUser(userId) {
   }
 
   const [rows] = await db.query(
-    "SELECT id, title, description, completed_at, created_at, updated_at FROM tasks WHERE user_id = ? ORDER BY created_at DESC",
+    "SELECT id, title, description, completed_at, created_at, updated_at, priority FROM tasks WHERE user_id = ? ORDER BY created_at DESC",
     [userId],
   );
 

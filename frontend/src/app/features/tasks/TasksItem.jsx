@@ -174,7 +174,7 @@ export const TasksItem = ({ tasksList, setTasksList, fetchTasks }) => {
   };
 
   const noCompleteTaskAfterAsk = async (taskId) => {
-    console.log('TASKID: ', taskId);
+    console.log("TASKID: ", taskId);
     setLoading(true);
     const typeOfField = "noComplete";
     const newValue = "noCompleted";
@@ -217,27 +217,6 @@ export const TasksItem = ({ tasksList, setTasksList, fetchTasks }) => {
     // Check all task when is pressend
   };
 
-  const menuTaskItems = [
-    {
-      id: "show",
-      label: "Show",
-      onClick: () => handleOpenModal(),
-      color: "var(--secondary-text",
-    },
-    {
-      id: "complete",
-      label: "Complete",
-      onClick: () => askAfterComplete(activeTaskId),
-      color: "var(--secondary-text)",
-    },
-    {
-      id: "delete",
-      label: "Delete",
-      onClick: askAfterDelete,
-      color: "var(--error)",
-    },
-  ];
-
   const activeTask = tasksList.find((task) => task.id === activeTaskId);
 
   return (
@@ -267,6 +246,12 @@ export const TasksItem = ({ tasksList, setTasksList, fetchTasks }) => {
         {tasksList.map((task) => {
           const labelId = `checkbox-list-secondary-label-${task.title}`;
           const isCompleted = task.completed_at !== null;
+          const priorityColor =
+            task.priority === "high"
+              ? "var(--primary)"
+              : task.priority === "medium"
+                ? "var(--warning)"
+                : "var(--secondary)";
           return (
             <Fragment key={task.id}>
               <ListItem
@@ -302,20 +287,36 @@ export const TasksItem = ({ tasksList, setTasksList, fetchTasks }) => {
                     slotProps={{ "aria-labelledby": labelId }}
                   />
                 </ListItemIcon>
-                <ListItemText
-                  id={labelId}
-                  primary={task.title}
-                  slotProps={{
-                    primary: {
-                      noWrap: true,
-                      sx: {
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      },
-                    },
-                  }}
-                  sx={{ overflow: "hidden" }}
-                />
+                <Box sx={{ pl: 2 }}>
+                  <Box size={6}>
+                    <ListItemText
+                      id={labelId}
+                      primary={task.title}
+                      slotProps={{
+                        primary: {
+                          noWrap: true,
+                          sx: {
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          },
+                        },
+                      }}
+                      sx={{ overflow: "hidden" }}
+                    />
+                  </Box>
+                  <Box size={6} sx={{ display: "flex", justifyContent: "end" }}>
+                    <ListItemText
+                      primary={`Priority: ${task.priority}`}
+                      slotProps={{
+                        primary: {
+                          sx: {
+                            color: priorityColor,
+                          },
+                        },
+                      }}
+                    />
+                  </Box>
+                </Box>
               </ListItem>
               <Divider />
             </Fragment>

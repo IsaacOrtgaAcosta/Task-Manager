@@ -73,7 +73,7 @@ It allows users to manage their tasks with authentication, filtering, and real-t
 ### 1. Clone the repository
 
 ```bash
-git clone [https://github.com/your-username/task-manager.git](https://github.com/IsaacOrtgaAcosta/Task-Manager.git)
+git clone https://github.com/IsaacOrtgaAcosta/Task-Manager.git
 cd Task-Manager
 ```
 

@@ -11,6 +11,7 @@ import { useTasksUI } from "../../providers/NewTaskProvider";
 import { NewTask } from "./NewTask";
 import { SpinnerComponent } from "../../shared/components/SpinnerComponent";
 import { PaginationComponent } from "../../shared/components/PaginationComponent";
+import { useFilteredTasks } from "../../shared/hooks/useFilteredTasks.jsx";
 
 export const TasksPage = () => {
   const [tasksList, setTasksList] = useState([]);
@@ -18,6 +19,7 @@ export const TasksPage = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalTasks, setTotalTasks] = useState(0);
+  const [search, setSearch] = useState("");
 
   const itemsPerPage = 10;
 
@@ -49,6 +51,7 @@ export const TasksPage = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
+  const filteredTasks = useFilteredTasks(tasksList, search, "title");
 
   if (loading) {
     return (
@@ -58,15 +61,16 @@ export const TasksPage = () => {
     );
   }
 
+
   if (tasksList.length > 0) {
     return (
       <>
         <Box sx={{ bgcolor: "background.paper", width: "100%", pt: 3 }}>
           <TasksHeader />
-          <TaskSearcher />
+          <TaskSearcher search={search} onSearchChange={setSearch}/>
           <TasksItem
             tasksList={tasksList}
-            setTasksList={setTasksList}
+            filteredTasks={filteredTasks}
             fetchTasks={fetchTasks}
           />
           <PaginationComponent
@@ -85,7 +89,8 @@ export const TasksPage = () => {
         </Box>
       </>
     );
-  } else {
+  } 
+
     return (
       <>
         <Box sx={{ bgcolor: "background.paper", width: "100%", pt: 3 }}>
@@ -110,5 +115,4 @@ export const TasksPage = () => {
         </Box>
       </>
     );
-  }
 };

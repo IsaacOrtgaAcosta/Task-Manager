@@ -21,7 +21,7 @@ import { ChildModalComponent } from "../../shared/components/ChildModalComponent
 import { SpinnerComponent } from "../../shared/components/SpinnerComponent";
 import { TaskActionsMenu } from "./TaskActionsMenu";
 
-export const TasksItem = ({ tasksList, setTasksList, fetchTasks }) => {
+export const TasksItem = ({ tasksList, filteredTasks, fetchTasks }) => {
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -243,7 +243,7 @@ export const TasksItem = ({ tasksList, setTasksList, fetchTasks }) => {
       </Fragment>
       <Divider></Divider>
       <List dense sx={{ width: "100%", bgcolor: "background.paper" }}>
-        {tasksList.map((task) => {
+        {filteredTasks.map((task) => {
           const labelId = `checkbox-list-secondary-label-${task.title}`;
           const isCompleted = task.completed_at !== null;
           const priorityColor =

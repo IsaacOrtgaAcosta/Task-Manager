@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS users (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   email VARCHAR(255) NOT NULL,
   name VARCHAR(255) NOT NULL,
-  password_hash VARCHAR(60) NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -16,6 +16,9 @@ CREATE TABLE IF NOT EXISTS tasks (
   title VARCHAR(120) NOT NULL,
   description TEXT NULL,
   completed_at TIMESTAMP NULL DEFAULT NULL,
+  start_date TIMESTAMP NULL DEFAULT NULL,
+  due_date TIMESTAMP NULL DEFAULT NULL,
+  priority ENUM('low', 'medium', 'high') NOT NULL DEFAULT 'medium',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
@@ -26,5 +29,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     ON DELETE CASCADE,
 
   INDEX idx_tasks_user_created (user_id, created_at),
-  INDEX idx_tasks_user_completed (user_id, completed_at)
+  INDEX idx_tasks_user_completed (user_id, completed_at),
+  INDEX idx_tasks_user_due_date (user_id, due_date),
+  INDEX idx_tasks_user_priority (user_id, priority)
 ) ENGINE=InnoDB;

@@ -22,12 +22,19 @@ import { SpinnerComponent } from "../../shared/components/SpinnerComponent";
 import { TaskActionsMenu } from "./TaskActionsMenu";
 
 export const TasksItem = ({ tasksList, filteredTasks, fetchTasks }) => {
+  // Local loading state for task-level async actions such as delete/update
   const [loading, setLoading] = useState(false);
+   // Stores selected task ids from checkboxes
   const [checked, setChecked] = useState([]);
+   // Reference element used by MUI menu to position the actions menu
   const [anchorEl, setAnchorEl] = useState(null);
+  // Keeps track of the task currently associated with the open actions menu
   const [activeTaskId, setActiveTaskId] = useState(null);
+    // Controls the visibility of the task detail modal
   const [openModal, setOpenModal] = useState(false);
+    // Controls the visibility of the confirmation modal
   const [openChildModal, setOpenChildModal] = useState(false);
+   // Stores the task currently selected to display detailed information in modal
   const [taskSelected, setTaskSelected] = useState({
     isCompleted: "",
     completedOrDueDate: "",
@@ -37,13 +44,14 @@ export const TasksItem = ({ tasksList, filteredTasks, fetchTasks }) => {
     id: "",
     title: "",
   });
+
   const [childModalProps, setChildModalProps] = useState({
     title: "",
     text: "",
     actions: "",
   });
   const open = Boolean(anchorEl);
-
+  // Toggle selection state for a single task checkbox
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -56,7 +64,7 @@ export const TasksItem = ({ tasksList, filteredTasks, fetchTasks }) => {
 
     setChecked(newChecked);
   };
-
+  // Opens the actions menu for a specific task and stores its id as active
   const openTaskMenu = (event, taskId) => {
     setAnchorEl(event.currentTarget);
     setActiveTaskId(taskId);
@@ -66,6 +74,11 @@ export const TasksItem = ({ tasksList, filteredTasks, fetchTasks }) => {
     setAnchorEl(null);
   };
 
+  /**
+   * Fetches full task information for the currently active task.
+   * This is useful because the list view contains only partial task data,
+   * while the modal requires richer information.
+   */
   const getTaskData = async () => {
     const result = await getTaskById(activeTaskId);
     const taskCompleted =
@@ -213,8 +226,27 @@ export const TasksItem = ({ tasksList, filteredTasks, fetchTasks }) => {
       setLoading(false);
     }
   };
-  const handleCheckAllTasks = (allIdTasks) => {
-    // Check all task when is pressend
+
+  const visibleTaskIds = filteredTasks.map((task) => task.id);
+  const areAllVisibleChecked =
+    visibleTaskIds.length > 0 &&
+    visibleTaskIds.every((taskId) => checked.includes(taskId));
+  const someVisibleChecked = visibleTaskIds.some((taskId) =>
+    checked.includes(taskId),
+  );
+
+  const handleCheckAllTasks = () => {
+    if (areAllVisibleChecked) {
+      setChecked((prevChecked) =>
+        prevChecked.filter((taskId) => !visibleTaskIds.includes(taskId)),
+      );
+      return;
+    }
+
+    setChecked((prevChecked) => [
+      ...prevChecked,
+      ...visibleTaskIds.filter((taskId) => !prevChecked.includes(taskId)),
+    ]);
   };
 
   const activeTask = tasksList.find((task) => task.id === activeTaskId);
@@ -236,7 +268,12 @@ export const TasksItem = ({ tasksList, filteredTasks, fetchTasks }) => {
           }
         >
           <ListItemIcon sx={{ pl: 1.5, minWidth: 36 }}>
-            <Checkbox edge="start" onChange={handleCheckAllTasks()} />
+            <Checkbox
+              edge="start"
+              checked={areAllVisibleChecked}
+              indeterminate={someVisibleChecked && !areAllVisibleChecked}
+              onChange={handleCheckAllTasks}
+            />
           </ListItemIcon>
           <ListItemText primary="Select all" />
         </ListItem>

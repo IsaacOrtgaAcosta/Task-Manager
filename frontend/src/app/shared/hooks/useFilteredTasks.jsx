@@ -4,6 +4,7 @@ export const useFilteredTasks = (tasksList, search) => {
   const filteredTasks = useMemo(() => {
     const normalizedSearch = search.toLowerCase().trim();
 
+    // IF THERE'RE ANY FILTERED TASK, RETURN COMPLETE TASKS FROM DB
     if (!normalizedSearch) return tasksList;
 
     return tasksList.filter((task) => {
